@@ -12,6 +12,7 @@ var port = process.env.PORT || 3000;
 const indexRoute = require('./libs/controllers/index.js');
 const chatRoute = require('./libs/controllers/chat.js');
 const gameRoute = require('./libs/controllers/game.js');
+const optionsRoute = require('./libs/controllers/options.js');
 
 app.set("twig options", {
     allow_async: true, // Allow asynchronous compiling
@@ -28,9 +29,12 @@ app.get('/chat', function(req, res){
     new chatRoute().exec(req, res);
 });
 
-
 app.get('/game', function(req, res){
     new gameRoute().exec(req, res);
+});
+
+app.get('/options', function(req, res){
+    new optionsRoute().exec(req, res);
 });
 
 io.on('connection', function(socket){
