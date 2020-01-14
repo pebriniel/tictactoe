@@ -1,0 +1,42 @@
+* {
+  padding: 0;
+  margin: 0; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: black; }
+
+#screen {
+  position: relative;
+  margin: auto; }
+
+#boards {
+  padding: 1rem;
+  width: 350px;
+  height: 350px;
+  background: red; }
+
+#boards .case-0::before {
+  content: 'X'; }
+
+#boards .case-1::before {
+  content: 'O'; }
+
+#boardsMessage {
+  position: relative;
+  margin: auto;
+  padding: 1rem;
+  text-align: center;
+  color: white; }
+
+.line {
+  display: block; }
+
+.case {
+  display: inline-block;
+  vertical-align: top;
+  background: olive; }
