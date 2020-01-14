@@ -1,11 +1,23 @@
 
-    Développement du projet en local, sans connexion requis, histoire d'avoir un jeu fonctionnel et de comprendre le fonctionnel.
-    Tic Tac Toe.
+    Boards
+        _level x3, x5, x7
 
-    123
-    456
-    789
+        Init()
+        CreateBoard()
+        ClearBoard
 
+    Players
+        _currentPlayer 0/1
+        0
 
-    grille
-    3x3x3
+    Player
+        _session (?)
+        _username
+        _score
+
+        setUsername();
+
+    Scores
+    Online
+    Sound (?)
+    Skins
