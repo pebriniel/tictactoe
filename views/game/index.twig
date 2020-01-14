@@ -1,0 +1,22 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div id="screen">
+    <div id="boards">
+
+    </div>
+    <div id="boardsMessage">
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+    Game.init();
+
+    Game.addPlayer('boussad');
+    Game.addPlayer('gabriel');
+</script>
+{% endblock %}
