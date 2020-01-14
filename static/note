@@ -1,0 +1,76 @@
+
+    Développement du projet en local, sans connexion requis, histoire d'avoir un jeu fonctionnel et de comprendre le fonctionnement.
+    Tic Tac Toe.
+
+    123
+    456
+    789
+
+    1/O = Joueur 1
+    2/X = joueur 2
+
+    var board = {
+        level: 0, //3x3
+        grids: {
+
+        }
+    }
+
+    var options = {
+        format: {
+            0: 3 // 3x3
+            1: 5 // 5x5
+        },
+        players: {
+            1: {
+                username: 'gabriel'
+            },
+            2: {
+                username: 'boussad'
+            }
+        }
+    }
+
+    console.log(options);
+
+    var options = {
+        'format': 3, // 3x3
+        'joueur': [] //Liste des joueurs participants
+    }
+
+    console.log(options);
+
+    liste des joueurs et de leurs scores enregistrés dans le local storage...
+        [
+            date,
+            players: {
+                1: {
+                    username: 'gabriel',
+                    score: 0
+                },
+                2: {
+                    username: 'boussad',
+                    score: 0
+                }
+            }
+        ]
+
+    derniers pseudos enregistrés dans le local storage :
+        player_1_username
+        player_2_username
+        skin_choice
+
+
+    On vérifie si un des deux joueurs gagnes.
+        BOUCLE CASES DE MA LIGNE
+            SI CASE 0 = 0x0 && CASE 1 = 0x1 && CASE 2 = 0x2
+            ALORS OK
+            SINON SI CASE 0 = 0x0 && CASE 1 = 0x2 (<= EXEMPLE)
+            BREAK;
+
+        BOUCLE COLONNE
+            SI COLONNE 0 LINE 0
+                0x0 =
+                1x0
+                2x0
+                ALORS OK
