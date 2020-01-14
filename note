@@ -8,16 +8,25 @@
 
     Players
         _currentPlayer 0/1
-        0
+        _player1 = n Player;
+        _player2 = n Player;
 
     Player
         _session (?)
         _username
         _score
 
+        getUsername();
         setUsername();
 
-    Scores
+        getScore();
+        setScore();
+
     Online
-    Sound (?)
+        (??)
+
+    Sound
+        (??)
+
     Skins
+        (??)
