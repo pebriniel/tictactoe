@@ -18,7 +18,7 @@ const Board = class {
             dline.classList.add('line');
 
             for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
-                var dcase = document.createElement("div");
+                let dcase = document.createElement("div");
 
                 dcase.classList.add('case');
 
@@ -95,43 +95,47 @@ var Interactive = {
 
     //Si le joueur clique sur une case
     ClickOnCase: function(e){
-
         let variable = Interactive.ChangeCaseValue(this);
 
-        if(variable == true){
-            const currentPlayer = Game.currentPlayer();
-
-            this.dataset.player = currentPlayer;
-            this.classList.add(`case-${currentPlayer}`);
-
-            Game.alternatePlayer();
-            // showMessage(``);
-            console.log('ok');
-            // checkWin();
-
+        if(Online.online){
+            let action = Interactive.getAction();
+            Online.sendAction(JSON.stringify(action));
         }
         else{
-            if(variable == -2)
-            {
-                console.log('plus disponible');
-                // showMessage(`La case n'est plus disponible`);
+
+            if(variable == true){
+                const currentPlayer = Game.currentPlayer();
+
+                this.dataset.player = currentPlayer;
+                this.classList.add(`case-${currentPlayer}`);
+
+                Game.alternatePlayer();
+
             }
-            else
-            {
-                console.log('pas disponible');
-                // showMessage(`La case n'est pas disponible`);
+            else{
+                if(variable == -2)
+                {
+                    console.log('plus disponible');
+                    // showMessage(`La case n'est plus disponible`);
+                }
+                else
+                {
+                    console.log('pas disponible');
+                    // showMessage(`La case n'est pas disponible`);
+                }
             }
         }
-
     },
 
-    //On change les valeurs de la case
+    //On vérifie les valeurs de la case
     ChangeCaseValue: function(element){
         let format = Game.getFormat(Game.getLevel());
 
         //Sélection
         let line = element.dataset.line;
         let column = element.dataset.column;
+
+        this.setAction({action: 'ChangeCaseValue', x: line, y: column});
 
         if(line < format && column < format){
             if(element.dataset.player == null)
@@ -145,6 +149,24 @@ var Interactive = {
         else{
             return false;
         }
+    },
+
+    setAction: function(value) {
+        this._action = value;
+    },
+
+    getAction: function() {
+        return this._action;
+    }
+}
+
+
+
+var Online = {
+    online: false,
+
+    sendAction: function(action){
+        socket.emit('game action', action);
     }
 }
 
@@ -200,6 +222,16 @@ const chat = function(){
          const m = document.querySelector("#m");
          socket.emit('chat message', m.value);
          m.value = '';
+     });
+
+
+     var form = document.querySelector("#formUsername");
+     form.addEventListener("submit", function (event) {
+         event.preventDefault();
+
+         const username = document.querySelector("#username");
+         socket.emit('chat username', username.value);
+         username.value = '';
      });
 
      socket.on('chat message', function(msg){

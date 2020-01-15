@@ -9,7 +9,17 @@ body {
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background: black; }
+  background: #fff;
+  color: #26499a; }
+
+h1, h2, h3, h4, h5, h6 {
+  color: #e9521a; }
+
+header {
+  height: 5vh;
+  background: #eb4d16; }
+  header h1 {
+    color: white; }
 
 #screen {
   position: relative;
@@ -40,12 +50,13 @@ body {
 .case {
   display: inline-block;
   vertical-align: top;
-  background: olive; }
+  font-size: 1.5rem;
+  color: white;
+  background: #226499; }
 
 form {
   background: #000;
   padding: 3px;
-  position: fixed;
   bottom: 0;
   width: 100%; }
 
