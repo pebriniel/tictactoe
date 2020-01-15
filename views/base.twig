@@ -4,11 +4,15 @@
         <link rel='stylesheet'  href='/static/assets/css/app.css' type='text/css' media='all' />
     </head>
     <body>
-
+    <header>
+        <h1>Tic Tac Toe</h1>
+        {% block header %}{% endblock %}
+    </header>
+    <body>
         {% block content %}{% endblock %}
+    </body>
 
-        <script src="/static/assets/js/app.js"></script>
-
-        {% block javascript %}{% endblock %}
+    <script src="/static/assets/js/app.js"></script>
+    {% block javascript %}{% endblock %}
     </body>
 </html>

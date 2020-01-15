@@ -18,7 +18,7 @@ const Board = class {
             dline.classList.add('line');
 
             for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
-                var dcase = document.createElement("div");
+                let dcase = document.createElement("div");
 
                 dcase.classList.add('case');
 

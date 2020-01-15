@@ -9,7 +9,17 @@ class gameController extends Controller{
 
         this.init();
 
-        return this._res.render('game/index.twig', this.view)
+        return this._res.render('game/local.twig', this.view)
+    }
+
+    execOnline(req, res) {
+
+        this._req = req;
+        this._res = res;
+
+        this.init();
+
+        return this._res.render('game/online.twig', this.view)
     }
 }
 
