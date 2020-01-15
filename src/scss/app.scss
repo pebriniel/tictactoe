@@ -1,58 +1,13 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-body {
-    display: flex;
+$color: #fff;
+$colorOrangeRed: #eb4d16;
+$colorText: #26499a;
+$colorTitle: #e9521a;
+$colorCarrer: #226499;
 
-    flex-direction: column;
-    justify-content: center;
+@import 'base';
+@import 'games';
 
-    width: 100vw;
-    height: 100vh;
-
-    background: black;
-}
-#screen{
-    position: relative;
-
-    margin: auto;
-}
-#boards {
-    padding: 1rem;
-
-    width: 350px;
-    height: 350px;
-
-    background: red;
-}
-#boards .case-0::before {
-    content: 'X';
-}
-#boards .case-1::before {
-    content: 'O';
-}
-#boardsMessage {
-    position: relative;
-
-    margin: auto;
-    padding: 1rem;
-
-    text-align: center;
-    color: white;
-}
-.line{
-    display: block;
-}
-.case {
-    display: inline-block;
-    vertical-align: top;
-
-    background: olive;
-}
-
-form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+form { background: #000; padding: 3px; bottom: 0; width: 100%; }
 form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
 form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
 #messages { list-style-type: none; margin: 0; padding: 0; }

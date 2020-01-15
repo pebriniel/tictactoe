@@ -1,0 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: $color;
+    color: $colorText;
+}
+h1,h2,h3,h4,h5,h6{
+    color: $colorTitle;
+}
+header{
+    height: 5vh;
+    background: $colorOrangeRed;
+
+    h1{
+        color: white;
+    }
+}
