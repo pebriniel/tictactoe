@@ -33,4 +33,9 @@ const Board = class {
             this._board.appendChild(dline);
         }
     }
+
+    checkVictory() {
+
+
+    }
 }

@@ -1,6 +1,14 @@
 
 var Interactive = {
+    //Si le joueur recherche une partie
+    searchGame: function(e){
+        Online.sendActionSpecific('game search', true);
+    },
 
+    //Si le joueur quitte la recherche une partie
+    searchGameLeave: function(e){
+        Online.sendActionSpecific('game leavesearch', false);
+    },
 
     //Si le joueur clique sur une case
     ClickOnCase: function(e){

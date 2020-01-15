@@ -4,15 +4,19 @@
         <link rel='stylesheet'  href='/static/assets/css/app.css' type='text/css' media='all' />
     </head>
     <body>
-    <header>
-        <h1>Tic Tac Toe</h1>
-        {% block header %}{% endblock %}
-    </header>
-    <body>
-        {% block content %}{% endblock %}
-    </body>
+        <header class="flex-container">
+            <h1>Tic Tac Toe</h1>
+            <ul class="menu align-right">
+              <li><a href="/game">Jouer</a></li>
+              <li><a href="/options">Options</a></li>
+              <li><a href="/login">Connexion</a></li>
+            </ul>
+        </header>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
 
-    <script src="/static/assets/js/app.js"></script>
-    {% block javascript %}{% endblock %}
+        <script src="/static/assets/js/app.js"></script>
+        {% block javascript %}{% endblock %}
     </body>
 </html>

@@ -2,6 +2,10 @@
 
 {% block content %}
 <div id="screen">
+    <div id="search">
+        <a id="searchgame">Recherche d'une partie</a>
+        <a id="searchgameleave">Quitter la recherche d'une partie</a>
+    </div>
     <div id="boards">
 
     </div>
@@ -16,11 +20,18 @@
 <script>
     var socket = io();
 
-    Game.init();
+    searchgame.addEventListener('click', Interactive.searchGame);
+    searchgameleave.addEventListener('click', Interactive.searchGameLeave);
 
-    Online.online = true;
+    socket.on('game find', function(msg){
 
-    Game.addPlayer('boussad');
-    Game.addPlayer('gabriel');
+        Game.init();
+
+        Online.online = true;
+
+        Game.addPlayer('boussad');
+        Game.addPlayer('gabriel');
+    });
+
 </script>
 {% endblock %}

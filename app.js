@@ -6,6 +6,8 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const Twig = require("twig");
 
+const uniqid = require('uniqid');
+
 const port = process.env.PORT || 3000;
 
 
@@ -29,6 +31,10 @@ app.get('/chat', function(req, res){
     new chatRoute().exec(req, res);
 });
 
+app.get('/game/select', function(req, res){
+    new gameRoute().select(req, res);
+});
+
 app.get('/game', function(req, res){
     new gameRoute().exec(req, res);
 });
@@ -43,6 +49,7 @@ app.get('/options', function(req, res){
 
 var allPlayers = [];
 var searchPlayers = [];
+var games = [];
 io.on('connection', function(socket){
     //On ajoute et initie le joueur
     allPlayers[socket.id];
@@ -56,16 +63,21 @@ io.on('connection', function(socket){
     });
 
     socket.on('game search', function(action){
-        allPlayers[socket.id];
-        console.log(allPlayers);
+        searchPlayers.push(socket.id);
+        console.log('Recherche de partie');
+        console.log(searchPlayers);
     });
 
     socket.on('game leavesearch', function(action){
-        delete searchPlayers[socket.id];
+        let i = searchPlayers.indexOf(socket.id);
+        delete searchPlayers[i];
+        console.log('Recherche de partie quitter');
+        console.log(searchPlayers);
     });
 
     socket.on('chat message', function(msg){
         io.emit('chat message', allPlayers[socket.id].username+ ' '+msg);
+        // io.sockets.socket(socketId).emit(msg);
     });
 
     socket.on('chat username', function(msg){
@@ -80,6 +92,39 @@ io.on('connection', function(socket){
 
    });
 });
+
+setInterval( function() {
+
+    if(searchPlayers.length == 2){
+        let joueur1 = searchPlayers.shift();
+        let joueur2 = searchPlayers.shift();
+
+        let _uniqid = uniqid();
+        games[_uniqid] = {};
+        games[_uniqid].players = {};
+        games[_uniqid].players[0] = joueur1;
+        games[_uniqid].players[1] = joueur2;
+
+        let namespace = null;
+        let ns = io.of(namespace || "/");
+
+        let socketPlayer1 = ns.connected[joueur1];
+        let socketPlayer2 = ns.connected[joueur2];
+
+        if (socketPlayer1 && socketPlayer2) {
+            socketPlayer1.emit("game find", 1);
+            socketPlayer2.emit("game find", 1);
+        } else {
+            if(socketPlayer1) {
+                socketPlayer1.emit("game search", 1);
+            }
+            if(socketPlayer2) {
+                socketPlayer2.emit("game search", 1);
+            }
+        }
+
+    }
+}, 4000);
 
 http.listen(port, function(){
   console.log('listening on *:' + port);
