@@ -16,6 +16,8 @@ const chatRoute = require('./libs/controllers/chat.js');
 const gameRoute = require('./libs/controllers/game.js');
 const optionsRoute = require('./libs/controllers/options.js');
 
+const Game = require('./libs/game/game.js');
+
 app.set("twig options", {
     allow_async: true, // Allow asynchronous compiling
     strict_variables: false
@@ -46,6 +48,9 @@ app.get('/game/online', function(req, res){
 app.get('/options', function(req, res){
     new optionsRoute().exec(req, res);
 });
+
+
+// Socket.io
 
 var allPlayers = [];
 var searchPlayers = [];
@@ -100,10 +105,9 @@ setInterval( function() {
         let joueur2 = searchPlayers.shift();
 
         let _uniqid = uniqid();
-        games[_uniqid] = {};
-        games[_uniqid].players = {};
-        games[_uniqid].players[0] = joueur1;
-        games[_uniqid].players[1] = joueur2;
+        games[_uniqid] = Game;
+        games[_uniqid].addPlayer(joueur1);
+        games[_uniqid].addPlayer(joueur2);
 
         let namespace = null;
         let ns = io.of(namespace || "/");
@@ -114,11 +118,24 @@ setInterval( function() {
         if (socketPlayer1 && socketPlayer2) {
             socketPlayer1.emit("game find", 1);
             socketPlayer2.emit("game find", 1);
+
+            socketPlayer1.on('game message', function(msg){
+                socketPlayer2.emit('game message', msg);
+                socketPlayer1.emit('game message', msg);
+                // io.sockets.socket(socketId).emit(msg);
+            });
+            socketPlayer2.on('game message', function(msg){
+                socketPlayer1.emit('game message', msg);
+                socketPlayer2.emit('game message', msg);
+                // io.sockets.socket(socketId).emit(msg);
+            });
         } else {
             if(socketPlayer1) {
+                socketPlayer1.emit("game clear", 1);
                 socketPlayer1.emit("game search", 1);
             }
             if(socketPlayer2) {
+                socketPlayer2.emit("game clear", 1);
                 socketPlayer2.emit("game search", 1);
             }
         }

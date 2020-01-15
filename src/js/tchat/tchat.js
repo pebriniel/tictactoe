@@ -1,5 +1,5 @@
 
-const chat = function(){
+const chat = function(channel = 'chat'){
     var form = document.querySelector("#chat");
 
     console.log(form);
@@ -8,7 +8,7 @@ const chat = function(){
          event.preventDefault();
 
          const m = document.querySelector("#m");
-         socket.emit('chat message', m.value);
+         socket.emit(`${channel} message`, m.value);
          m.value = '';
      });
 
@@ -18,11 +18,11 @@ const chat = function(){
          event.preventDefault();
 
          const username = document.querySelector("#username");
-         socket.emit('chat username', username.value);
+         socket.emit(`${channel} username`, username.value);
          username.value = '';
      });
 
-     socket.on('chat message', function(msg){
+     socket.on(`${channel} message`, function(msg){
          let li = document.createElement("li");
          li.innerHTML = msg;
          messages.appendChild(li);

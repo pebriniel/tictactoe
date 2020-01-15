@@ -14,10 +14,10 @@ var Game = {
         this._board.generateBoard();
     },
 
-    addPlayer: function(username = 'player'){
+    addPlayer: function(session){
         player = new Player();
 
-        player.setUsername(username);
+        player.setSession(session);
 
         this._joueurs.push(player);
     },

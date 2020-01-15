@@ -6,6 +6,14 @@ const Player = class {
         this._score = 0;
     }
 
+    getSession() {
+        return this._username;
+    }
+
+    setSession(session) {
+        this._session = session;
+    }
+
     getUsername() {
         return this._username;
     }
