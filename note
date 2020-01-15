@@ -1,3 +1,6 @@
+    - veiller à bien fermer la connexion entre les deux joueurs en cas de déconnexion, ou de fin de partie.
+
+    Jeu jouable au clavier ?
 
     Boards
         _level x3, x5, x7
@@ -35,3 +38,4 @@
     options
         Choix du pseudo
         Choix du skin
+        Choix des raccourcis (?)

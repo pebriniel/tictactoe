@@ -34,7 +34,7 @@ const Board = class {
         }
     }
 
-    checkVictory() {
+    checkWin() {
 
 
     }

@@ -33,6 +33,11 @@ const Board = class {
             this._board.appendChild(dline);
         }
     }
+
+    checkWin() {
+
+
+    }
 }
 
 
@@ -51,10 +56,10 @@ var Game = {
         this._board.generateBoard();
     },
 
-    addPlayer: function(username = 'player'){
+    addPlayer: function(session){
         player = new Player();
 
-        player.setUsername(username);
+        player.setSession(session);
 
         this._joueurs.push(player);
     },
@@ -91,7 +96,15 @@ var Game = {
 
 
 var Interactive = {
+    //Si le joueur recherche une partie
+    searchGame: function(e){
+        Online.sendActionSpecific('game search', true);
+    },
 
+    //Si le joueur quitte la recherche une partie
+    searchGameLeave: function(e){
+        Online.sendActionSpecific('game leavesearch', false);
+    },
 
     //Si le joueur clique sur une case
     ClickOnCase: function(e){
@@ -167,6 +180,10 @@ var Online = {
 
     sendAction: function(action){
         socket.emit('game action', action);
+    },
+
+    sendActionSpecific: function(action, value){
+        socket.emit(action, action);
     }
 }
 
@@ -176,6 +193,14 @@ const Player = class {
         this._session = null;
         this._username = 'player';
         this._score = 0;
+    }
+
+    getSession() {
+        return this._username;
+    }
+
+    setSession(session) {
+        this._session = session;
     }
 
     getUsername() {
@@ -211,7 +236,7 @@ const Player = class {
 // Game.addPlayer('gabriel');<
 
 
-const chat = function(){
+const chat = function(channel = 'chat'){
     var form = document.querySelector("#chat");
 
     console.log(form);
@@ -220,7 +245,7 @@ const chat = function(){
          event.preventDefault();
 
          const m = document.querySelector("#m");
-         socket.emit('chat message', m.value);
+         socket.emit(`${channel} message`, m.value);
          m.value = '';
      });
 
@@ -230,11 +255,11 @@ const chat = function(){
          event.preventDefault();
 
          const username = document.querySelector("#username");
-         socket.emit('chat username', username.value);
+         socket.emit(`${channel} username`, username.value);
          username.value = '';
      });
 
-     socket.on('chat message', function(msg){
+     socket.on(`${channel} message`, function(msg){
          let li = document.createElement("li");
          li.innerHTML = msg;
          messages.appendChild(li);

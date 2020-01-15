@@ -41,6 +41,17 @@
         Game.addPlayer('gabriel');
     });
 
+    socket.on('game action', function(action){
+        action = JSON.parse(action);
+
+        const columns = document.querySelectorAll(`[data-column~="${action.y}"]`);
+        const currentPlayer = action.player;
+
+        console.log(columns[action.x]);
+        columns[action.x].dataset.player = currentPlayer;
+        columns[action.x].classList.add(`case-${currentPlayer}`);
+    });
+
     var socket = io();
     chat('game');
 

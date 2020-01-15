@@ -1,5 +1,6 @@
 const Board = require('./board.js');
 const Player = require('./player.js');
+const Interactive = require('./interactive.js');
 
 const Game = {
     _joueurs: [],
@@ -13,7 +14,10 @@ const Game = {
 
     init: function(){
         this._board = new Board();
-        this._board.generateBoard();
+        this._board.generateBoard(Game.getLevel(), Game.getFormat(Game.getLevel()));
+
+        this._interactive = Interactive;
+        this._interactive.init(this);
     },
 
     addPlayer: function(username = 'player'){
@@ -51,6 +55,10 @@ const Game = {
 
     getFormats: function(){
         return this._format;
+    },
+
+    getInteractive: function(){
+        return this._interactive;
     }
 }
 

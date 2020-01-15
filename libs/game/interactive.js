@@ -1,64 +1,58 @@
-const Online = require('./online.js');
 const Game = require('./game.js');
 
 var Interactive = {
-    //Si le joueur recherche une partie
-    searchGame: function(e){
-        Online.sendActionSpecific('game search', true);
-    },
 
-    //Si le joueur quitte la recherche une partie
-    searchGameLeave: function(e){
-        Online.sendActionSpecific('game leavesearch', false);
+    init: function(game){
+        this._game = game;
     },
 
     //Si le joueur clique sur une case
-    ClickOnCase: function(e){
-        let variable = Interactive.ChangeCaseValue(this);
+    ClickOnCase: function(action, player) {
+        const currentPlayer = this._game.currentPlayer();
 
-        if(Online.online){
-            let action = Interactive.getAction();
-            Online.sendAction(JSON.stringify(action));
-        }
-        else{
+        if(currentPlayer == player)
+        {
 
-            if(variable == true){
-                const currentPlayer = Game.currentPlayer();
+            const variable = Interactive.ChangeCaseValue(action);
 
-                this.dataset.player = currentPlayer;
-                this.classList.add(`case-${currentPlayer}`);
+            if(variable == true)
+            {
+                action.player = currentPlayer;
+                this.setAction(action);
 
-                Game.alternatePlayer();
-
+                this._game.alternatePlayer();
             }
             else{
                 if(variable == -2)
                 {
-                    console.log('plus disponible');
-                    // showMessage(`La case n'est plus disponible`);
+                    this.setActionValide(`La case n'est plus disponible`);
                 }
                 else
                 {
-                    console.log('pas disponible');
-                    // showMessage(`La case n'est pas disponible`);
+                    this.setActionError(`La case n'est pas disponible`);
                 }
             }
+        }
+        else{
+            this.setActionError(`Ce n'est pas votre tour`);
         }
     },
 
     //On vérifie les valeurs de la case
-    ChangeCaseValue: function(element){
-        let format = Game.getFormat(Game.getLevel());
+    ChangeCaseValue: function(action){
+        const format = this._game.getFormat(this._game.getLevel());
+        const board = this._game._board;
+        const currentPlayer = this._game.currentPlayer();
 
         //Sélection
-        let line = element.dataset.line;
-        let column = element.dataset.column;
-
-        this.setAction({action: 'ChangeCaseValue', x: line, y: column});
+        const line = action.x;
+        const column = action.y;
 
         if(line < format && column < format){
-            if(element.dataset.player == null)
+            if(board.getValue(line, column) == null)
             {
+                console.log('player courant'+currentPlayer);
+                board.setValue(line, column, currentPlayer);
                 return true;
             }
             else{
@@ -68,6 +62,18 @@ var Interactive = {
         else{
             return false;
         }
+    },
+
+    setActionMessage: function(type, message) {
+        this.setAction({action: 'pushMessage', type: type, 'message': message});
+    },
+
+    setActionError: function(message) {
+        this.setActionMessage('erreur', message);
+    },
+
+    setActionValide: function(message) {
+        this.setActionMessage('valide', message)
     },
 
     setAction: function(value) {

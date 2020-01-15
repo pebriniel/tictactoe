@@ -62,11 +62,6 @@ io.on('connection', function(socket){
     allPlayers[socket.id] = {};
     allPlayers[socket.id].username = 'boussad';
 
-    socket.on('game action', function(action){
-        console.log(action);
-        // io.emit('game action', allPlayers[socket.id].username+ ' '+msg);
-    });
-
     socket.on('game search', function(action){
         searchPlayers.push(socket.id);
         console.log('Recherche de partie');
@@ -108,6 +103,7 @@ setInterval( function() {
         games[_uniqid] = Game;
         games[_uniqid].addPlayer(joueur1);
         games[_uniqid].addPlayer(joueur2);
+        games[_uniqid].init();
 
         let namespace = null;
         let ns = io.of(namespace || "/");
@@ -128,6 +124,24 @@ setInterval( function() {
                 socketPlayer1.emit('game message', msg);
                 socketPlayer2.emit('game message', msg);
                 // io.sockets.socket(socketId).emit(msg);
+            });
+
+            function getGameAction(action, player){
+
+                action = JSON.parse(action);
+                games[_uniqid].getInteractive().ClickOnCase(action, player);
+
+                action = games[_uniqid].getInteractive().getAction();
+
+                socketPlayer1.emit('game action', JSON.stringify(action));
+                socketPlayer2.emit('game action', JSON.stringify(action));
+            }
+
+            socketPlayer1.on('game action', function(action){
+                getGameAction(action, 0);
+            });
+            socketPlayer2.on('game action', function(action){
+                getGameAction(action, 1);
             });
         } else {
             if(socketPlayer1) {

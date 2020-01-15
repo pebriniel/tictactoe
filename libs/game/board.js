@@ -3,37 +3,32 @@ const Game = require('./game.js');
 const Board = class {
 
     constructor() {
-
+        this._board = [];
     }
 
-    generateBoard() {
-        let level = Game.getLevel();
+    generateBoard(level, format) {
 
-        let widthCase = this._board.offsetWidth/Game.getFormat(Game.getLevel());
+        for(let line = 0; line < format; line ++){
+            this._board.push([]);
 
-        for(let line = 0; line < Game.getFormat(Game.getLevel()); line ++){
-            let dline = document.createElement("div");
-
-            dline.classList.add('line');
-
-            for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
-                let dcase = document.createElement("div");
-
-                dcase.classList.add('case');
-
-                dcase.dataset.line = line;
-                dcase.dataset.column = column;
-
-                dcase.style = 'width:calc('+widthCase+'px - 1.1rem); height:calc('+widthCase+'px - 1.1rem); margin: 0.2rem';
-                dcase.addEventListener('click', Interactive.ClickOnCase);
-
-                dline.appendChild(dcase);
+            for(let column = 0; column < format; column ++){
+                this._board[line][column] = null;
             }
-            this._board.appendChild(dline);
+
         }
+
     }
 
-    checkVictory() {
+    getValue(line, column) {
+        return this._board[line][column];
+    }
+
+    setValue(line, column, value) {
+        this._board[line][column] = value;
+        console.log(this._board);
+    }
+
+    checkWin() {
 
 
     }
