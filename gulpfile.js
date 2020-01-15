@@ -12,6 +12,10 @@ var source = './src'; // dossier de travail
 var destination = './dist'; // dossier à livrer
 
 
+var sassPaths = [
+    'node_modules/foundation-sites/scss'
+];
+
 ///////////////////////////////////////////////////
 //  CSS
 ///////////////////////////////////////////////////
@@ -23,6 +27,7 @@ gulp.task('css', function () {
         .pipe($.sass({ // transformation du sass en css
             outputStyle: 'nested',
             precision: 5,
+            includePaths: sassPaths
         }))
         .pipe(rename('app.css')) // renommage du fichier
         .pipe(gulp.dest(destination+'/assets/css')) // copie du fichier dans sa destination
