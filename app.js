@@ -115,15 +115,16 @@ setInterval( function() {
             socketPlayer1.emit("game find", 1);
             socketPlayer2.emit("game find", 1);
 
+            //On attends les messages du joueur 1
             socketPlayer1.on('game message', function(msg){
                 socketPlayer2.emit('game message', msg);
                 socketPlayer1.emit('game message', msg);
-                // io.sockets.socket(socketId).emit(msg);
             });
+
+            //On attends les messages du joueur 2
             socketPlayer2.on('game message', function(msg){
                 socketPlayer1.emit('game message', msg);
                 socketPlayer2.emit('game message', msg);
-                // io.sockets.socket(socketId).emit(msg);
             });
 
             function getGameAction(action, player){
@@ -133,15 +134,31 @@ setInterval( function() {
 
                 action = games[_uniqid].getInteractive().getAction();
 
-                socketPlayer1.emit('game action', JSON.stringify(action));
-                socketPlayer2.emit('game action', JSON.stringify(action));
+                // S'il n'y a pas d'erreur on envoie les informations aux joueurs
+                if(action.erreur == undefined){
+                    socketPlayer1.emit('game action', JSON.stringify(action));
+                    socketPlayer2.emit('game action', JSON.stringify(action));
+                }
             }
 
+            //On attends les actions du joueur 1
             socketPlayer1.on('game action', function(action){
                 getGameAction(action, 0);
+
+                //Si il y a une erreur, on envoie le message d'erreur au joueur 1
+                if(action.erreur != undefined){
+                    socketPlayer1.emit('game action', JSON.stringify(action));
+                }
             });
+
+            //On attends les actions du joueur 20
             socketPlayer2.on('game action', function(action){
                 getGameAction(action, 1);
+
+                //Si il y a une erreur, on envoie le message d'erreur au joueur 2
+                if(action.erreur != undefined){
+                    socketPlayer2.emit('game action', JSON.stringify(action));
+                }
             });
         } else {
             if(socketPlayer1) {
