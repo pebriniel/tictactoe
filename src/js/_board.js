@@ -8,16 +8,16 @@ const Board = class {
     }
 
     generateBoard() {
-        let level = Game.getLevel();
+        const level = Game.getLevel();
 
-        let widthCase = this._board.offsetWidth/Game.getFormat(Game.getLevel());
+        let widthCase = this._board.offsetWidth/Game.getFormat(level);
 
-        for(let line = 0; line < Game.getFormat(Game.getLevel()); line ++){
+        for(let line = 0; line < Game.getFormat(level); line ++){
             let dline = document.createElement("div");
 
             dline.classList.add('line');
 
-            for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
+            for(let column = 0; column < Game.getFormat(level); column ++){
                 let dcase = document.createElement("div");
 
                 dcase.classList.add('case');
@@ -52,26 +52,33 @@ const Board = class {
         let victoire = 0;
         let column, returnPlayer;
 
-        for(let line = 0; line < Game.getFormat(Game.getLevel()); line ++){
+        for(let c = 0; c < Game.getFormat(Game.getLevel()); c ++){
 
-            column = line;
-            if(inverse){
-                column = (Game.getFormat(Game.getLevel()) - 1) - line;
-            }
+            for(let line = 0; line < Game.getFormat(Game.getLevel()); line ++){
 
-            returnPlayer = this.checkWinElement(`[data-line~="${line}"][data-column~="${column}"]`, true);
+                column = c + line;
+                if(inverse){
+                    column = (Game.getFormat(Game.getLevel()) - c) - line;
+                    column = Math.abs(column);
+                }
 
-            if(returnPlayer != currentPlayer){
-                victoire = 1;
-                currentPlayer = returnPlayer;
-            }
-            else{
-                victoire ++;
-            }
+                console.log(column);
 
-            if(victoire == 3){
+                console.log(`[data-line~="${line}"][data-column~="${column}"]`);
+                returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
 
-                return returnPlayer;
+                if(returnPlayer != currentPlayer){
+                    victoire = 1;
+                    currentPlayer = returnPlayer;
+                }
+                else if(returnPlayer != null || returnPlayer != undefined){
+                    victoire ++;
+                }
+
+                if(victoire == Game._max){
+                    console.log('victoire');
+                    return returnPlayer;
+                }
             }
         }
     }
@@ -97,7 +104,7 @@ const Board = class {
 
             elements = document.querySelectorAll(`div.case-${indexPlayer}${_class}`);
 
-            if(elements.length == 3 || (elements.length && _returnElement)){
+            if(elements.length == Game._max || (elements.length && _returnElement)){
                 return indexPlayer;
             }
         }

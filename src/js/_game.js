@@ -3,14 +3,20 @@ var Game = {
 
     _format: {
         0: 3, // 3x3
-        1: 5 // 5x5
+        1: 5, // 5x5
+        2: 7 // 7x7
     },
 
-    init: function(){
+    init: function(mode = 0){
 
-        this._joueurs = [],
-        this._currentPlayer = 0,
-        this._level = 0,
+        this._joueurs = [];
+        this._currentPlayer = 0;
+        this._level = mode;
+        this._max = 3;
+
+        if(mode != 0){
+            this._max = 4;
+        }
 
         this._board = new Board();
         this._board.generateBoard();

@@ -8,7 +8,7 @@
     height: 350px;
 
     padding: 1rem;
-    
+
     margin: auto;
     margin-top: 1rem;
 
@@ -59,6 +59,10 @@
 
             .launch{
                 padding: 2rem;
+
+                a{
+                    display: block;
+                }
             }
         }
     }

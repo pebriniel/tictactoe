@@ -5619,6 +5619,8 @@ section a {
       text-align: left; }
     #mode main div .launch {
       padding: 2rem; }
+      #mode main div .launch a {
+        display: block; }
 
 #searchBlock div {
   margin: auto;
