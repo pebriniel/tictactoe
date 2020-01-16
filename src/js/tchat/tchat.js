@@ -32,6 +32,10 @@ const chat = function(channel = 'chat'){
      }
 }
 
+const chatClean = function(){
+    messages.innerHTML = '';
+}
+
 
 const pushMessage = function(message) {
     let messages = document.querySelector('#messages');

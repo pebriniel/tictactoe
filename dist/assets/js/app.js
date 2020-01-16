@@ -226,6 +226,9 @@ var Interactive = {
     //On affiche l'écran de victoire
     screenEndGame: function(action = {}){
 
+        //On clean le chat
+        chatClean();
+
         if(typeof winSplash !== 'undefined'){
             winSplash.classList.add('hidden');
             if(action.win != undefined && action.win){
@@ -446,6 +449,10 @@ const chat = function(channel = 'chat'){
              username.value = '';
          });
      }
+}
+
+const chatClean = function(){
+    messages.innerHTML = '';
 }
 
 
