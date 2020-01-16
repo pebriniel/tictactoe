@@ -69,9 +69,14 @@ io.on('connection', function(socket){
     });
 
     socket.on('game leavesearch', function(action){
-        let i = searchPlayers.indexOf(socket.id);
-        delete searchPlayers[i];
+        delete allPlayers[socket.id];
+
+        searchPlayers = searchPlayers.filter(function (el) {
+          return el != socket.id;
+        });
+
         console.log('Recherche de partie quitter');
+        console.log(allPlayers);
         console.log(searchPlayers);
     });
 
@@ -86,9 +91,11 @@ io.on('connection', function(socket){
 
     //On nsupprime le joueur du tableau
     socket.on('disconnect', function() {
-
       delete allPlayers[socket.id];
-      delete searchPlayers[socket.id];
+
+      searchPlayers = searchPlayers.filter(function (el) {
+        return el != socket.id;
+      });
 
    });
 });
