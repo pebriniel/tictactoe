@@ -160,6 +160,18 @@ setInterval( function() {
                     socketPlayer2.emit('game action', JSON.stringify(action));
                 }
             });
+
+            //On attends les actions du joueur 1
+            socketPlayer1.on('game leave', function(action){
+                action = {action: 'leaveGame', type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
+                socketPlayer2.emit('game action', JSON.stringify(action));
+            });
+
+            //On attends les actions du joueur 20
+            socketPlayer2.on('game leave', function(action){
+                action = {action: 'leaveGame', type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
+                socketPlayer1.emit('game action', JSON.stringify(action));
+            });
         } else {
             if(socketPlayer1) {
                 socketPlayer1.emit("game clear", 1);

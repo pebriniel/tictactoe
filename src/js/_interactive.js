@@ -3,11 +3,17 @@ var Interactive = {
     //Si le joueur recherche une partie
     searchGame: function(e){
         Online.sendActionSpecific('game search', true);
+
+        searchgameleaveBlock.classList.remove('hidden');
+        searchgameBlock.classList.add('hidden');
     },
 
     //Si le joueur quitte la recherche une partie
     searchGameLeave: function(e){
         Online.sendActionSpecific('game leavesearch', false);
+
+        searchgameBlock.classList.remove('hidden');
+        searchgameleaveBlock.classList.add('hidden');
     },
 
     //Si le joueur clique sur une case
@@ -57,6 +63,23 @@ var Interactive = {
         else{
             return false;
         }
+    },
+
+    beforeleavePage: function(e) {
+        if(!e) e = window.event;
+        //e.cancelBubble is supported by IE - this will kill the bubbling process.
+        e.cancelBubble = true;
+        e.returnValue = 'Êtes vous sûr de vouloir quitter ?'; //This is displayed on the dialog
+
+        //e.stopPropagation works in Firefox.
+        if (e.stopPropagation) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    },
+
+    leavePage: function(e) {
+        Online.sendActionSpecific('game leave', true);
     },
 
     setAction: function(value) {

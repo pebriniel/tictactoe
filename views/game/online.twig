@@ -1,20 +1,32 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<div class="row">
-    <div id="boardsMessage" class="medium-6 columns medium-push-6">
+<section id="searchBlock">
+    <header class="row">
+        <div class="medium-12 columns">
+            <h2 class="text-center ">Recherche d'une partie</h2>
+        </div>
+    </header>
+    <main class="row">
+        <div id="searchgameBlock" class="hidden medium-5 columns callout">
+            <a id="searchgame" class="btn">Recherche d'une partie</a>
+        </div>
+
+        <div id="searchgameleaveBlock" class="medium-5 columns callout">
+            <a id="searchgameleave" class="btn">Quitter la recherche d'une partie</a>
+        </div>
+    </main>
+</section>
+
+<section id="boardBlock" class="hidden">
+    <div id="screen" class="medium-6 columns">
+        <div id="boards">
+        </div>
+    </div>
+    <div id="boardsMessage" class="medium-6 columns">
         {% include 'chat/chat.inc.twig' %}
     </div>
-    <div id="screen" class="medium-6 columns medium-pull-6">
-        <div id="search">
-            <a id="searchgame">Recherche d'une partie</a>
-            <a id="searchgameleave">Quitter la recherche d'une partie</a>
-        </div>
-        <div id="boards">
-
-        </div>
-    </div>
-</div>
+</section>
 {% endblock %}
 
 {% block javascript %}
@@ -22,10 +34,15 @@
 <script>
     var socket = io();
 
+    Interactive.searchGame();
+
     searchgame.addEventListener('click', Interactive.searchGame);
     searchgameleave.addEventListener('click', Interactive.searchGameLeave);
 
     socket.on('game find', function(msg){
+
+        searchBlock.classList.add('hidden');
+        boardBlock.classList.remove('hidden');
 
         Game.init();
 
@@ -49,11 +66,19 @@
             pushMessage(action);
 
         }
+        else if(action.action == 'leaveGame'){
+
+            pushMessage(action);
+
+        }
 
     });
 
     var socket = io();
     chat('game');
+
+    window.addEventListener('beforeunload', Interactive.beforeleavePage);
+    window.addEventListener('unload', Interactive.leavePage);
 
 </script>
 {% endblock %}
