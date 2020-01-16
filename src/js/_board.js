@@ -87,7 +87,7 @@ const Board = class {
             }
         }
 
-        return false;
+        return null;
     }
 
     checkWinElement(_class, _returnElement = false){
@@ -124,6 +124,7 @@ const Board = class {
             victoire = this.checkWinElementDiagonal(true);
         }
 
+        console.log(victoire);
 
         return victoire;
     }

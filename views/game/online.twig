@@ -12,6 +12,9 @@
             <div id="winSplash" class="hidden medium-5 columns callout">
                 <h3 class="text-center">Victoire !</h3>
             </div>
+            <div id="looseSplash" class="hidden medium-5 columns callout">
+                <h3 class="text-center">Défaite !</h3>
+            </div>
         </section>
 
         <section class="row">
@@ -89,8 +92,9 @@
         }
         else if(action.action == 'leaveGame'){
 
+
             pushMessage(action);
-            Interactive.screenEndGame(action);
+            Game.clear(false, action);
             Online.online = false;
 
             window.removeEventListener('beforeunload', Interactive.beforeleavePage);

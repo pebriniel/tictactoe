@@ -16,11 +16,13 @@ var Game = {
         this._board.generateBoard();
     },
 
-    clear: function(relaunch = false){
-        Interactive.cleanBoard();
+    clear: function(relaunch = false, action = {}){
+        Interactive.cleanBoard(action);
 
         if(relaunch){
             this.init();
+            Game.addPlayer('boussad');
+            Game.addPlayer('gabriel');
         }
     },
 

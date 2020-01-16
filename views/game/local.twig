@@ -1,21 +1,34 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<section class="row">
-    <div id="screen" class="medium-5 columns">
-        <div id="boards">
-
+<section id="searchBlock" class="hidden">
+    <section class="row">
+        <div id="winSplash" class="medium-5 columns callout">
+            <h3 class="text-center">Victoire !</h3>
         </div>
-        <div id="boardsMessage">
+    </section>
+    <section class="row">
+        <div class="actionBlock">
+            <a class="btn btn-restart">Nouvelle partie</a>
+        </div>
+    </section>
+</section>
 
+<section id="boardBlock">
+    <div class="row">
+        <div id="screen" class="medium-5 columns">
+            <div id="boards">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="actionBlock">
+            <a class="btn btn-reset">Reset</a>
         </div>
     </div>
 </section>
-<section class="row">
-    <div class="actionBlock">
-        <a class="btn btn-reset">Reset</a>
-    </div>
-</section>
+
 {% endblock %}
 
 
@@ -26,7 +39,12 @@
     Game.addPlayer('boussad');
     Game.addPlayer('gabriel');
 
-    document.querySelector('.btn-reset').addEventListener('click', Interactive.loadButtonReset);
+    document.querySelector('.btn-reset').addEventListener('click', () => {
+        Interactive.loadButtonReset({reset: true});
+    });
+    document.querySelector('.btn-restart').addEventListener('click', () => {
+        Interactive.loadButtonReset({reset: true});
+    });
 
 </script>
 {% endblock %}

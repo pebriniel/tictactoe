@@ -1,4 +1,5 @@
 
+
 var Interactive = {
     //Si le joueur recherche une partie
     searchGame: function(e){
@@ -17,10 +18,20 @@ var Interactive = {
     },
 
     //On affiche l'écran de victoire
-    screenEndGame: function(){
+    screenEndGame: function(action = {}){
 
         if(typeof winSplash !== 'undefined'){
             winSplash.classList.add('hidden');
+            if(action.win != undefined && action.win){
+                winSplash.classList.remove('hidden');
+            }
+        }
+
+        if(typeof looseSplash !== 'undefined'){
+            looseSplash.classList.add('hidden');
+            if(action.loose != undefined && action.loose){
+                looseSplash.classList.remove('hidden');
+            }
         }
 
         if(typeof searchgameBlock !== 'undefined'){
@@ -36,10 +47,15 @@ var Interactive = {
             boardBlock.classList.add('hidden');
         }
 
+        if(action.reset != undefined && action.reset){
+            searchBlock.classList.add('hidden');
+            boardBlock.classList.remove('hidden');
+        }
+
     },
 
-    cleanBoard: function(){
-        this.screenEndGame();
+    cleanBoard: function(action = {}){
+        this.screenEndGame(action);
         boards.innerHTML = '';
     },
 
@@ -60,7 +76,7 @@ var Interactive = {
 
             if(Game.getBoard().checkWin()){
                 console.log('ok');
-                Interactive.screenEndGame({victoire: 1});
+                Interactive.screenEndGame({win: 1});
             }
         }
         else if(variable == -2)
@@ -110,9 +126,9 @@ var Interactive = {
         }
     },
 
-    loadButtonReset: function(e) {
+    loadButtonReset: function(action = {}) {
         if(Online.online == false){
-            Game.clear(true);
+            Game.clear(true, action);
         }
     },
 

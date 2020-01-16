@@ -28,9 +28,114 @@ const Board = class {
         console.log(this._board);
     }
 
-    checkWin() {
+    async checkWinElementDiagonal(inverse = false){
+        let currentPlayer = null;
+        let victoire = 0;
+        let column, returnPlayer;
 
+        for(let line = 0; line < this._board.length; line ++){
 
+            column = line;
+            if(inverse){
+                column = (this._board.length - 1) - line;
+            }
+
+            returnPlayer = this._board[line][column];
+
+            if(returnPlayer != currentPlayer){
+                victoire = 1;
+                currentPlayer = returnPlayer;
+            }
+            else{
+                victoire ++;
+            }
+
+            if(victoire == 3){
+
+                return returnPlayer;
+            }
+        }
+    }
+
+    async checkWinHorizontal() {
+        let valeur = null;
+        let result = null;
+
+        for(let line of this._board){
+            valeur = null;
+            result = line.every( (val, i, arr) => {
+                if(val === arr[0]){
+                    valeur = val;
+                    return val + 1;
+                }
+                else{
+                    return false;
+                }
+
+            });
+
+            if(result) return valeur;
+        }
+    }
+
+    async checkWinElement(){
+        let lastPlayer = null, playerwin = null, score = 0;
+
+        for(let i = 0; i < this._board.length; i ++){
+            score = 1;
+            for(let line of this._board){
+                console.log(line[i]);
+                if(line[i] != lastPlayer){
+                    score = 1;
+                    lastPlayer = line[i];
+                    console.log('init joueur');
+                }
+                else{
+                    console.log('addscore');
+                    console.log(lastPlayer);
+                    score ++;
+                }
+
+                if(score == 3){
+                    console.log('victoire');
+                    console.log(lastPlayer);
+                    playerwin = lastPlayer;
+                    break;
+                    // return true;
+                }
+            }
+            if(score == 3){
+
+                break;
+                // return true;
+            }
+        }
+
+        return playerwin;
+    }
+
+    async checkWin() {
+        let victoire = null;
+
+        victoire = await this.checkWinHorizontal();
+        console.log('checkWinHorizontal '+victoire);
+
+        if(victoire == null){
+            victoire = await this.checkWinElement();
+            console.log('checkWinElement '+victoire);
+        }
+
+        if(victoire == null){
+            victoire = await this.checkWinElementDiagonal();
+            console.log('checkWinElementDiagonal '+victoire);
+        }
+
+        if(victoire == null){
+            victoire = await this.checkWinElementDiagonal(true);
+            console.log('checkWinElementDiagonal reverse '+victoire);
+        }
+
+        return victoire;
     }
 }
 

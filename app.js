@@ -150,19 +150,50 @@ setInterval( function() {
                 }
             }
 
+            function sendWinStatus(victoire){
+
+                let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
+                let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
+
+                if(victoire == 0){
+                    socketPlayer1.emit('game action', JSON.stringify(actionWin));
+                    socketPlayer2.emit('game action', JSON.stringify(actionLoose));
+                }
+                else if(victoire == 1){
+                    socketPlayer1.emit('game action', JSON.stringify(actionLoose));
+                    socketPlayer2.emit('game action', JSON.stringify(actionWin));
+                }
+
+                console.log('sendWinStatus'+victoire);
+                if(victoire){
+                    console.log(_uniqid);
+                    delete games[_uniqid];
+                    delete socketPlayer1;
+                    delete socketPlayer2;
+                }
+            }
+
             //On attends les actions du joueur 1
-            socketPlayer1.on('game action', function(action){
+            socketPlayer1.on('game action', async function(action){
                 getGameAction(action, 0);
+
+
+                let victoire = await games[_uniqid].getBoard().checkWin();
 
                 //Si il y a une erreur, on envoie le message d'erreur au joueur 1
                 if(action.erreur != undefined){
                     socketPlayer1.emit('game action', JSON.stringify(action));
                 }
+
+                sendWinStatus(victoire);
             });
 
             //On attends les actions du joueur 20
-            socketPlayer2.on('game action', function(action){
+            socketPlayer2.on('game action', async function(action){
                 getGameAction(action, 1);
+
+                let victoire = await  games[_uniqid].getBoard().checkWin();
+                sendWinStatus(victoire);
 
                 //Si il y a une erreur, on envoie le message d'erreur au joueur 2
                 if(action.erreur != undefined){

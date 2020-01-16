@@ -2,6 +2,50 @@ const Board = require('./board.js');
 const Player = require('./player.js');
 const Interactive = require('./interactive.js');
 
+// variables = [[1,1,0],[0,1,1],[0,1,1]];
+//
+// lastPlayer = null, score = 0;
+// for(i = 0; i < 3; i ++){
+//     score = 1;
+//     for(line of variables){
+//         console.log(line[i]);
+//         if(line[i] != lastPlayer){
+//             score = 1;
+//             lastPlayer = line[i];
+//             console.log('init joueur');
+//         }
+//         else{
+//             console.log('addscore');
+//             score ++;
+//         }
+//
+//         if(score == 3){
+//             console.log('victoire'+score+' '+i);
+//             break;
+//             // return true;
+//         }
+//     }
+//     console.log(score);
+// }
+// //test ligne par ligne
+// for(line of variables){
+// let valeur = null;
+// result = line.every( (val, i, arr) => {
+//     if(val === arr[0]){
+//         valeur = val;
+//         return val + 1;
+//     }
+//     else{
+//         return false;
+//     }
+//
+// });
+// if(result){
+//     console.log(valeur);
+//     break;
+// }
+// }
+
 const Game = class {
 
     constructor() {
@@ -47,6 +91,10 @@ const Game = class {
 
     getLevel(){
         return this._level;
+    }
+
+    getBoard(){
+        return this._board;
     }
 
     getFormat(val = 0){
