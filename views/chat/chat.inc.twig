@@ -1,0 +1,12 @@
+<div id="containerMessage">
+    <ul id="messages"></ul>
+
+    <form id="chat" action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    {% if inputUsername is defined %}
+    <form id="formUsername" action="">
+        <input id="username" autocomplete="off" placeholder="username" /><button>Send</button>
+    </form>
+    {% endif %}
+</div>

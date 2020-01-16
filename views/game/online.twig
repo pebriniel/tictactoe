@@ -1,26 +1,20 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<div id="screen">
-    <div id="search">
-        <a id="searchgame">Recherche d'une partie</a>
-        <a id="searchgameleave">Quitter la recherche d'une partie</a>
+<div class="row">
+    <div id="boardsMessage" class="medium-6 columns medium-push-6">
+        {% include 'chat/chat.inc.twig' %}
     </div>
-    <div id="boards">
+    <div id="screen" class="medium-6 columns medium-pull-6">
+        <div id="search">
+            <a id="searchgame">Recherche d'une partie</a>
+            <a id="searchgameleave">Quitter la recherche d'une partie</a>
+        </div>
+        <div id="boards">
 
-    </div>
-    <div id="boardsMessage">
-
+        </div>
     </div>
 </div>
-<ul id="messages"></ul>
-
-<form id="chat" action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
-</form>
-<form id="formUsername" action="">
-    <input id="username" autocomplete="off" placeholder="username" /><button>Send</button>
-</form>
 {% endblock %}
 
 {% block javascript %}
@@ -44,12 +38,18 @@
     socket.on('game action', function(action){
         action = JSON.parse(action);
 
-        const columns = document.querySelectorAll(`[data-column~="${action.y}"]`);
-        const currentPlayer = action.player;
+        if(action.action == 'ChangeCaseValue') {
 
-        console.log(columns[action.x]);
-        columns[action.x].dataset.player = currentPlayer;
-        columns[action.x].classList.add(`case-${currentPlayer}`);
+            Game.getBoard().setCasePlayer(null, action);
+            Game.alternatePlayer();
+
+        }
+        else if(action.action == 'pushMessage'){
+
+            pushMessage(action);
+
+        }
+
     });
 
     var socket = io();

@@ -1,17 +1,29 @@
 <!doctype html>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Tic Tac Toe</title>
+
         <link rel='stylesheet'  href='/static/assets/css/app.css' type='text/css' media='all' />
     </head>
     <body>
-        <header class="flex-container">
-            <h1>Tic Tac Toe</h1>
-            <ul class="menu align-right">
-              <li><a href="/game">Jouer</a></li>
-              <li><a href="/options">Options</a></li>
-              <li><a href="/login">Connexion</a></li>
-            </ul>
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li class="menu-text">Tic Tac Toe</li>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li><a href="/game/select">Jouer</a></li>
+                    <li><a href="/options">Options</a></li>
+                    <li><a href="/login">Connexion</a></li>
+                </ul>
+            </div>
         </header>
+
         <main>
             {% block content %}{% endblock %}
         </main>
