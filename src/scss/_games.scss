@@ -8,7 +8,9 @@
     height: 350px;
 
     padding: 1rem;
+    
     margin: auto;
+    margin-top: 1rem;
 
     background: red;
 
@@ -44,19 +46,6 @@
         div{
             text-align: center;
 
-            a{
-                padding: 1rem;
-
-                text-transform: uppercase;
-
-                background: black;
-                color: white;
-
-                &:hover{
-                    background: gray;
-                }
-            }
-
             ul {
                 text-align: left;
             }
@@ -79,5 +68,16 @@
     div{
         margin: auto;
         text-align: center;
+    }
+}
+
+.actionBlock{
+    position: relative;
+
+    margin: auto;
+    margin-top: 1rem;
+
+    a{
+        display: block;
     }
 }
