@@ -112,8 +112,6 @@ setInterval( function() {
         games[_uniqid].addPlayer(joueur2);
         games[_uniqid].init();
 
-        console.log(games);
-
         let namespace = null;
         let ns = io.of(namespace || "/");
 
@@ -215,6 +213,7 @@ setInterval( function() {
 
             //Si joueur 1 quitte le jeu
             socketPlayer1.on('game leave', function(action){
+
                 action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
                 socketPlayer2.emit('game action', JSON.stringify(action));
 
@@ -222,11 +221,11 @@ setInterval( function() {
                 delete socketPlayer1;
                 delete socketPlayer2;
 
-                console.log(games);
             });
 
             //Si joueur 2 quitte le jeu
             socketPlayer2.on('game leave', function(action){
+
                 action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
                 socketPlayer1.emit('game action', JSON.stringify(action));
 
@@ -234,7 +233,6 @@ setInterval( function() {
                 delete socketPlayer1;
                 delete socketPlayer2;
 
-                console.log(games);
             });
         } else {
             if(socketPlayer1) {

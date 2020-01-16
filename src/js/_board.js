@@ -62,9 +62,6 @@ const Board = class {
                     column = Math.abs(column);
                 }
 
-                console.log(column);
-
-                console.log(`[data-line~="${line}"][data-column~="${column}"]`);
                 returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
 
                 if(returnPlayer != currentPlayer){
