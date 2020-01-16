@@ -100,10 +100,12 @@ setInterval( function() {
         let joueur2 = searchPlayers.shift();
 
         let _uniqid = uniqid();
-        games[_uniqid] = Game;
+        games[_uniqid] = new Game();
         games[_uniqid].addPlayer(joueur1);
         games[_uniqid].addPlayer(joueur2);
         games[_uniqid].init();
+
+        console.log(games);
 
         let namespace = null;
         let ns = io.of(namespace || "/");
@@ -161,16 +163,28 @@ setInterval( function() {
                 }
             });
 
-            //On attends les actions du joueur 1
+            //Si joueur 1 quitte le jeu
             socketPlayer1.on('game leave', function(action){
-                action = {action: 'leaveGame', type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
+                action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
                 socketPlayer2.emit('game action', JSON.stringify(action));
+
+                delete games[_uniqid];
+                delete socketPlayer1;
+                delete socketPlayer2;
+
+                console.log(games);
             });
 
-            //On attends les actions du joueur 20
+            //Si joueur 2 quitte le jeu
             socketPlayer2.on('game leave', function(action){
-                action = {action: 'leaveGame', type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
+                action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
                 socketPlayer1.emit('game action', JSON.stringify(action));
+
+                delete games[_uniqid];
+                delete socketPlayer1;
+                delete socketPlayer2;
+
+                console.log(games);
             });
         } else {
             if(socketPlayer1) {

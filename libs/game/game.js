@@ -2,62 +2,65 @@ const Board = require('./board.js');
 const Player = require('./player.js');
 const Interactive = require('./interactive.js');
 
-const Game = {
-    _joueurs: [],
-    _currentPlayer: 0,
-    _level: 0,
+const Game = class {
 
-    _format: {
-        0: 3, // 3x3
-        1: 5 // 5x5
-    },
+    constructor() {
+        this._joueurs = [];
+        this._currentPlayer = 0;
+        this._level = 0;
 
-    init: function(){
+        this._format = {
+            0: 3, // 3x3
+            1: 5 // 5x5
+        };
+    }
+
+    init(){
         this._board = new Board();
-        this._board.generateBoard(Game.getLevel(), Game.getFormat(Game.getLevel()));
+        this._board.generateBoard(this.getLevel(), this.getFormat(this.getLevel()));
 
         this._interactive = Interactive;
         this._interactive.init(this);
-    },
+    }
 
-    addPlayer: function(username = 'player'){
-        player = new Player();
+    addPlayer(username = 'player'){
+        const player = new Player();
 
         player.setUsername(username);
 
         this._joueurs.push(player);
-    },
+    }
 
     // Si player est égal à false, on renvoie la valeur brute de la variables
     // sinon, on renvoie les données du joueurs
-    currentPlayer: function(player = false){
+    currentPlayer(player = false){
         if(player){
             return this._joueurs[this._currentPlayer];
         }
 
         return this._currentPlayer;
-    },
+    }
 
-    alternatePlayer: function(){
+    alternatePlayer(){
         this._currentPlayer = (this._currentPlayer) ? 0 : 1;
-    },
+    }
 
-    getLevel: function(){
+    getLevel(){
         return this._level;
-    },
+    }
 
-    getFormat: function(val = 0){
+    getFormat(val = 0){
         if(this._format[val] != undefined){
             return this._format[val];
         }
         return 0;
-    },
+    }
 
-    getFormats: function(){
+    getFormats(){
         return this._format;
-    },
+    }
 
-    getInteractive: function(){
+    getInteractive(){
         return this._interactive;
     }
 }
