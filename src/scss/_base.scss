@@ -1,10 +1,25 @@
 h1,h2,h3,h4,h5,h6{
-    color: $colorTitle;
+    // color: $colorTitle;
+    text-transform: uppercase;
+}
+html{
+    font-family: 'Roboto', sans-serif;
 }
 header{
-    background: $colorOrangeRed;
-
     h1{
         color: white;
     }
+}
+.hidden{
+    display: none;
+}
+
+section{
+
+    header{
+        width: 100vw;
+
+        padding: 2rem;
+    }
+    
 }

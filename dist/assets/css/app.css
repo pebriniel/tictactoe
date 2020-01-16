@@ -5561,12 +5561,20 @@ a.thumbnail {
     order: 6; } }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #e9521a; }
+  text-transform: uppercase; }
 
-header {
-  background: #eb4d16; }
-  header h1 {
-    color: white; }
+html {
+  font-family: 'Roboto', sans-serif; }
+
+header h1 {
+  color: white; }
+
+.hidden {
+  display: none; }
+
+section header {
+  width: 100vw;
+  padding: 2rem; }
 
 #screen {
   position: relative;
@@ -5578,44 +5586,41 @@ header {
   padding: 1rem;
   margin: auto;
   background: red; }
+  #boards .case-0::before {
+    content: 'X'; }
+  #boards .case-1::before {
+    content: 'O'; }
+  #boards .line {
+    display: block; }
+  #boards .case {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 1.5rem;
+    color: white;
+    background: #226499; }
 
-#boards .case-0::before {
-  content: 'X'; }
-
-#boards .case-1::before {
-  content: 'O'; }
-
-.line {
-  display: block; }
-
-.case {
-  display: inline-block;
-  vertical-align: top;
-  font-size: 1.5rem;
-  color: white;
-  background: #226499; }
-
-#mode {
-  background: #eb4d16; }
-  #mode header {
-    width: 100vw;
-    padding: 2rem; }
-    #mode header h2 {
-      color: white; }
-  #mode main {
-    width: 100vw;
-    height: auto;
-    margin-top: 1rem;
-    padding: 2rem; }
-  #mode div {
+#mode main {
+  width: 100vw;
+  height: auto;
+  margin-top: 1rem;
+  padding: 2rem; }
+  #mode main div {
     text-align: center; }
-    #mode div a {
+    #mode main div a {
       padding: 1rem;
       text-transform: uppercase;
       background: black;
       color: white; }
-      #mode div a:hover {
+      #mode main div a:hover {
         background: gray; }
+    #mode main div ul {
+      text-align: left; }
+    #mode main div .launch {
+      padding: 2rem; }
+
+#searchBlock div {
+  margin: auto;
+  text-align: center; }
 
 #containerMessage {
   position: relative;
