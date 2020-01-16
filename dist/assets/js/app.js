@@ -34,6 +34,19 @@ const Board = class {
         }
     }
 
+    setCasePlayer(el, action){
+        if(el == null){
+            const columns = document.querySelectorAll(`[data-column~="${action.y}"]`);
+            el = columns[action.x];
+        }
+
+        console.log(action);
+
+        el.dataset.player = action.player;
+        el.classList.add(`case-${action.player}`);
+    }
+
+
     checkWin() {
 
 
@@ -91,6 +104,10 @@ var Game = {
 
     getFormats: function(){
         return this._format;
+    },
+
+    getBoard: function(){
+        return this._board;
     }
 }
 
@@ -110,33 +127,24 @@ var Interactive = {
     ClickOnCase: function(e){
         let variable = Interactive.ChangeCaseValue(this);
 
-        if(Online.online){
+        if(Online.online && variable == true){
             let action = Interactive.getAction();
             Online.sendAction(JSON.stringify(action));
         }
-        else{
+        else if(variable == true){
+            const currentPlayer = Game.currentPlayer();
 
-            if(variable == true){
-                const currentPlayer = Game.currentPlayer();
+            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
-                this.dataset.player = currentPlayer;
-                this.classList.add(`case-${currentPlayer}`);
-
-                Game.alternatePlayer();
-
-            }
-            else{
-                if(variable == -2)
-                {
-                    console.log('plus disponible');
-                    // showMessage(`La case n'est plus disponible`);
-                }
-                else
-                {
-                    console.log('pas disponible');
-                    // showMessage(`La case n'est pas disponible`);
-                }
-            }
+            Game.alternatePlayer();
+        }
+        else if(variable == -2)
+        {
+            pushMessage({type: 'erreur', message: `La case n'est plus disponible`});
+        }
+        else
+        {
+            pushMessage({type: 'erreur', message: `La case n'est plus disponible`});
         }
     },
 
@@ -171,6 +179,7 @@ var Interactive = {
     getAction: function() {
         return this._action;
     }
+
 }
 
 
@@ -237,32 +246,49 @@ const Player = class {
 
 
 const chat = function(channel = 'chat'){
-    var form = document.querySelector("#chat");
+    let form = document.querySelector("#chat");
 
-    console.log(form);
-     // … et prenez en charge l'événement submit.
-     form.addEventListener("submit", function (event) {
-         event.preventDefault();
+    if(form){
+        // … et prenez en charge l'événement submit.
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
 
-         const m = document.querySelector("#m");
-         socket.emit(`${channel} message`, m.value);
-         m.value = '';
-     });
+            const m = document.querySelector("#m");
+            socket.emit(`${channel} message`, m.value);
+            m.value = '';
+        });
+
+        socket.on(`${channel} message`, function(msg){
+            pushMessage({type: 'message', message: msg});
+            // let li = document.createElement("li");
+            // li.innerHTML = msg;
+            // messages.appendChild(li);
+        });
+    }
+
+     let formUsername = document.querySelector("#formUsername");
+     if(formUsername){
+         formUsername.addEventListener("submit", function (event) {
+             event.preventDefault();
+
+             const username = document.querySelector("#username");
+             socket.emit(`${channel} username`, username.value);
+             username.value = '';
+         });
+     }
+}
 
 
-     var form = document.querySelector("#formUsername");
-     form.addEventListener("submit", function (event) {
-         event.preventDefault();
+const pushMessage = function(message) {
+    let messages = document.querySelector('#messages');
 
-         const username = document.querySelector("#username");
-         socket.emit(`${channel} username`, username.value);
-         username.value = '';
-     });
+    if(messages){
+        let li = document.createElement("li");
+        li.classList.add(`type-${message.type}`);
 
-     socket.on(`${channel} message`, function(msg){
-         let li = document.createElement("li");
-         li.innerHTML = msg;
-         messages.appendChild(li);
-       // window.scrollTo(0, document.body.scrollHeight);
-     });
+        li.innerHTML = message.message;
+        messages.appendChild(li);
+
+        containerMessage.scrollTop = containerMessage.scrollHeight;
+    }
 }
