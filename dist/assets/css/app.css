@@ -5576,6 +5576,14 @@ section header {
   width: 100vw;
   padding: 2rem; }
 
+section a {
+  padding: 1rem;
+  text-transform: uppercase;
+  background: black;
+  color: white; }
+  section a:hover {
+    background: gray; }
+
 #screen {
   position: relative;
   margin: auto; }
@@ -5585,6 +5593,7 @@ section header {
   height: 350px;
   padding: 1rem;
   margin: auto;
+  margin-top: 1rem;
   background: red; }
   #boards .case-0::before {
     content: 'X'; }
@@ -5606,13 +5615,6 @@ section header {
   padding: 2rem; }
   #mode main div {
     text-align: center; }
-    #mode main div a {
-      padding: 1rem;
-      text-transform: uppercase;
-      background: black;
-      color: white; }
-      #mode main div a:hover {
-        background: gray; }
     #mode main div ul {
       text-align: left; }
     #mode main div .launch {
@@ -5621,6 +5623,13 @@ section header {
 #searchBlock div {
   margin: auto;
   text-align: center; }
+
+.actionBlock {
+  position: relative;
+  margin: auto;
+  margin-top: 1rem; }
+  .actionBlock a {
+    display: block; }
 
 #containerMessage {
   position: relative;

@@ -55,9 +55,6 @@ const Board = class {
 
 
 var Game = {
-    _joueurs: [],
-    _currentPlayer: 0,
-    _level: 0,
 
     _format: {
         0: 3, // 3x3
@@ -65,8 +62,21 @@ var Game = {
     },
 
     init: function(){
+
+        this._joueurs = [],
+        this._currentPlayer = 0,
+        this._level = 0,
+
         this._board = new Board();
         this._board.generateBoard();
+    },
+
+    clear: function(relaunch = false){
+        Interactive.cleanBoard();
+
+        if(relaunch){
+            this.init();
+        }
     },
 
     addPlayer: function(session){
@@ -129,6 +139,33 @@ var Interactive = {
         searchgameleaveBlock.classList.add('hidden');
     },
 
+    //On affiche l'écran de vitoire
+    screenEndGame: function(){
+
+        if(typeof winSplash !== 'undefined'){
+            winSplash.classList.add('hidden');
+        }
+
+        if(typeof searchgameBlock !== 'undefined'){
+            searchgameBlock.classList.remove('hidden');
+        }
+
+        if(typeof searchgameleaveBlock !== 'undefined'){
+            searchgameleaveBlock.classList.add('hidden');
+        }
+
+        if(typeof searchBlock !== 'undefined'){
+            searchBlock.classList.remove('hidden');
+            boardBlock.classList.add('hidden');
+        }
+
+    },
+
+    cleanBoard: function(){
+        this.screenEndGame();
+        boards.innerHTML = '';
+    },
+
     //Si le joueur clique sur une case
     ClickOnCase: function(e){
         let variable = Interactive.ChangeCaseValue(this);
@@ -188,6 +225,12 @@ var Interactive = {
         if (e.stopPropagation) {
             e.stopPropagation();
             e.preventDefault();
+        }
+    },
+
+    loadButtonReset: function(e) {
+        if(Online.online == false){
+            Game.clear(true);
         }
     },
 
