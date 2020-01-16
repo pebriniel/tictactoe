@@ -37,12 +37,12 @@ app.get('/game/select', function(req, res){
     new gameRoute().select(req, res);
 });
 
-app.get('/game/:mode', function(req, res){
-    new gameRoute().exec(req, res);
-});
-
 app.get('/game/online', function(req, res){
     new gameRoute().execOnline(req, res);
+});
+
+app.get('/game/:mode', function(req, res){
+    new gameRoute().exec(req, res);
 });
 
 app.get('/options', function(req, res){
