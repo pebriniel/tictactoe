@@ -14,33 +14,24 @@ var Interactive = {
     ClickOnCase: function(e){
         let variable = Interactive.ChangeCaseValue(this);
 
-        if(Online.online){
+        if(Online.online && variable == true){
             let action = Interactive.getAction();
             Online.sendAction(JSON.stringify(action));
         }
-        else{
+        else if(variable == true){
+            const currentPlayer = Game.currentPlayer();
 
-            if(variable == true){
-                const currentPlayer = Game.currentPlayer();
+            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
-                this.dataset.player = currentPlayer;
-                this.classList.add(`case-${currentPlayer}`);
-
-                Game.alternatePlayer();
-
-            }
-            else{
-                if(variable == -2)
-                {
-                    console.log('plus disponible');
-                    // showMessage(`La case n'est plus disponible`);
-                }
-                else
-                {
-                    console.log('pas disponible');
-                    // showMessage(`La case n'est pas disponible`);
-                }
-            }
+            Game.alternatePlayer();
+        }
+        else if(variable == -2)
+        {
+            pushMessage({type: 'erreur', message: `La case n'est plus disponible`});
+        }
+        else
+        {
+            pushMessage({type: 'erreur', message: `La case n'est plus disponible`});
         }
     },
 
@@ -75,4 +66,5 @@ var Interactive = {
     getAction: function() {
         return this._action;
     }
+
 }

@@ -49,5 +49,9 @@ var Game = {
 
     getFormats: function(){
         return this._format;
+    },
+
+    getBoard: function(){
+        return this._board;
     }
 }

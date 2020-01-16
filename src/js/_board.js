@@ -34,6 +34,19 @@ const Board = class {
         }
     }
 
+    setCasePlayer(el, action){
+        if(el == null){
+            const columns = document.querySelectorAll(`[data-column~="${action.y}"]`);
+            el = columns[action.x];
+        }
+
+        console.log(action);
+
+        el.dataset.player = action.player;
+        el.classList.add(`case-${action.player}`);
+    }
+
+
     checkWin() {
 
 

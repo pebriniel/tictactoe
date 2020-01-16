@@ -4,10 +4,11 @@
     margin: auto;
 }
 #boards {
-    padding: 1rem;
-
     width: 350px;
     height: 350px;
+
+    padding: 1rem;
+    margin: auto;
 
     background: red;
 }
@@ -16,15 +17,6 @@
 }
 #boards .case-1::before {
     content: 'O';
-}
-#boardsMessage {
-    position: relative;
-
-    margin: auto;
-    padding: 1rem;
-
-    text-align: center;
-    color: white;
 }
 .line{
     display: block;
@@ -37,4 +29,41 @@
 
     color: white;
     background: $colorCarrer;
+}
+
+#mode{
+    background: $colorOrangeRed;
+
+    header{
+        width: 100vw;
+
+        padding: 2rem;
+
+        h2{
+            color: white;
+        }
+    }
+    main{
+        width: 100vw;
+        height: auto;
+
+        margin-top: 1rem;
+        padding: 2rem;
+    }
+    div{
+        text-align: center;
+
+        a{
+            padding: 1rem;
+
+            text-transform: uppercase;
+
+            background: black;
+            color: white;
+
+            &:hover{
+                background: gray;
+            }
+        }
+    }
 }
