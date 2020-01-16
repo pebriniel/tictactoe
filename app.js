@@ -166,6 +166,7 @@ setInterval( function() {
 
                 console.log('sendWinStatus'+victoire);
                 if(victoire){
+                    console.log('delete de la session');
                     console.log(_uniqid);
                     delete games[_uniqid];
                     delete socketPlayer1;
@@ -193,12 +194,13 @@ setInterval( function() {
                 getGameAction(action, 1);
 
                 let victoire = await  games[_uniqid].getBoard().checkWin();
-                sendWinStatus(victoire);
 
                 //Si il y a une erreur, on envoie le message d'erreur au joueur 2
                 if(action.erreur != undefined){
                     socketPlayer2.emit('game action', JSON.stringify(action));
                 }
+
+                sendWinStatus(victoire);
             });
 
             //Si joueur 1 quitte le jeu
