@@ -452,7 +452,9 @@ const chat = function(channel = 'chat'){
 }
 
 const chatClean = function(){
-    messages.innerHTML = '';
+    if(typeof messages !== 'undefined'){
+        messages.innerHTML = '';
+    }
 }
 
 
