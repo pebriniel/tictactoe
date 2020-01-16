@@ -16,7 +16,7 @@ var Interactive = {
         searchgameleaveBlock.classList.add('hidden');
     },
 
-    //On affiche l'écran de vitoire
+    //On affiche l'écran de victoire
     screenEndGame: function(){
 
         if(typeof winSplash !== 'undefined'){
@@ -57,6 +57,11 @@ var Interactive = {
             Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             Game.alternatePlayer();
+
+            if(Game.getBoard().checkWin()){
+                console.log('ok');
+                Interactive.screenEndGame({victoire: 1});
+            }
         }
         else if(variable == -2)
         {
