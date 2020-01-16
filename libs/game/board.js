@@ -25,7 +25,6 @@ const Board = class {
 
     setValue(line, column, value) {
         this._board[line][column] = value;
-        console.log(this._board);
     }
 
     async checkWinElementDiagonal(inverse = false){
@@ -83,23 +82,18 @@ const Board = class {
 
         for(let i = 0; i < this._board.length; i ++){
             score = 1;
+
             for(let line of this._board){
-                console.log(line[i]);
                 if(line[i] != lastPlayer){
                     score = 1;
                     lastPlayer = line[i];
-                    console.log('init joueur');
                 }
                 else{
-                    console.log('addscore');
-                    console.log(lastPlayer);
                     score ++;
                 }
 
                 if(score == 3){
-                    console.log('victoire');
-                    console.log(lastPlayer);
-                    playerwin = lastPlayer;
+                    return lastPlayer;
                     break;
                     // return true;
                 }
@@ -111,28 +105,24 @@ const Board = class {
             }
         }
 
-        return playerwin;
+        return null;
     }
 
     async checkWin() {
         let victoire = null;
 
         victoire = await this.checkWinHorizontal();
-        console.log('checkWinHorizontal '+victoire);
 
         if(victoire == null){
             victoire = await this.checkWinElement();
-            console.log('checkWinElement '+victoire);
         }
 
         if(victoire == null){
             victoire = await this.checkWinElementDiagonal();
-            console.log('checkWinElementDiagonal '+victoire);
         }
 
         if(victoire == null){
             victoire = await this.checkWinElementDiagonal(true);
-            console.log('checkWinElementDiagonal reverse '+victoire);
         }
 
         return victoire;

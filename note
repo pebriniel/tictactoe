@@ -1,4 +1,5 @@
     - veiller à bien fermer la connexion entre les deux joueurs en cas de déconnexion, ou de fin de partie.
+    - problème avec la recherche de partie, il est possible de s'inscrire un nombre illimité de fois
 
     Jeu jouable au clavier ?
 

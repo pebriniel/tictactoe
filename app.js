@@ -26,8 +26,7 @@ app.set("twig options", {
 app.use('/static', express.static(__dirname + '/dist'));
 
 app.get('/', function(req, res){
-    // new indexRoute().exec(req, res);
-    new gameRoute().select(req, res);
+    new indexRoute().exec(req, res);
 });
 
 app.get('/chat', function(req, res){
@@ -125,6 +124,13 @@ setInterval( function() {
             socketPlayer1.emit("game find", 1);
             socketPlayer2.emit("game find", 1);
 
+            //Message d'accueil
+            games[_uniqid].getInteractive().setActionMessage('valide', `Vous commencez !`);
+            socketPlayer1.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
+
+            games[_uniqid].getInteractive().setActionMessage('valide', `Vous êtes le deuxième joueur ! `);
+            socketPlayer2.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
+
             //On attends les messages du joueur 1
             socketPlayer1.on('game message', function(msg){
                 socketPlayer2.emit('game message', msg);
@@ -145,10 +151,12 @@ setInterval( function() {
                 action = games[_uniqid].getInteractive().getAction();
 
                 // S'il n'y a pas d'erreur on envoie les informations aux joueurs
-                if(action.erreur == undefined){
+                if(action.type != 'erreur'){
                     socketPlayer1.emit('game action', JSON.stringify(action));
                     socketPlayer2.emit('game action', JSON.stringify(action));
                 }
+
+                return action;
             }
 
             function sendWinStatus(victoire){
@@ -165,10 +173,8 @@ setInterval( function() {
                     socketPlayer2.emit('game action', JSON.stringify(actionWin));
                 }
 
-                console.log('sendWinStatus'+victoire);
-                if(victoire){
-                    console.log('delete de la session');
-                    console.log(_uniqid);
+                //On supprime le Board
+                if(victoire != undefined || victoire != null){
                     delete games[_uniqid];
                     delete socketPlayer1;
                     delete socketPlayer2;
@@ -177,31 +183,34 @@ setInterval( function() {
 
             //On attends les actions du joueur 1
             socketPlayer1.on('game action', async function(action){
-                getGameAction(action, 0);
+                action = getGameAction(action, 0);
 
 
                 let victoire = await games[_uniqid].getBoard().checkWin();
+                sendWinStatus(victoire);
 
+                console.log(action);
                 //Si il y a une erreur, on envoie le message d'erreur au joueur 1
-                if(action.erreur != undefined){
+                if(action.type == 'erreur'){
                     socketPlayer1.emit('game action', JSON.stringify(action));
                 }
 
-                sendWinStatus(victoire);
             });
 
             //On attends les actions du joueur 20
             socketPlayer2.on('game action', async function(action){
-                getGameAction(action, 1);
+                action = getGameAction(action, 1);
 
                 let victoire = await  games[_uniqid].getBoard().checkWin();
+                sendWinStatus(victoire);
 
+                console.log(action);
                 //Si il y a une erreur, on envoie le message d'erreur au joueur 2
-                if(action.erreur != undefined){
+                if(action.type == 'erreur'){
                     socketPlayer2.emit('game action', JSON.stringify(action));
                 }
 
-                sendWinStatus(victoire);
+                // sendWinStatus(victoire);
             });
 
             //Si joueur 1 quitte le jeu

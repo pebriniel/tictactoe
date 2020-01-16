@@ -51,7 +51,6 @@ var Interactive = {
         if(line < format && column < format){
             if(board.getValue(line, column) == null)
             {
-                console.log('player courant'+currentPlayer);
                 board.setValue(line, column, currentPlayer);
                 return true;
             }
