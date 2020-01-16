@@ -1,8 +1,5 @@
 
 var Game = {
-    _joueurs: [],
-    _currentPlayer: 0,
-    _level: 0,
 
     _format: {
         0: 3, // 3x3
@@ -10,8 +7,21 @@ var Game = {
     },
 
     init: function(){
+
+        this._joueurs = [],
+        this._currentPlayer = 0,
+        this._level = 0,
+
         this._board = new Board();
         this._board.generateBoard();
+    },
+
+    clear: function(relaunch = false){
+        Interactive.cleanBoard();
+
+        if(relaunch){
+            this.init();
+        }
     },
 
     addPlayer: function(session){

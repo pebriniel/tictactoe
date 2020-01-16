@@ -1,14 +1,21 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<div id="screen">
-    <div id="boards">
+<section class="row">
+    <div id="screen" class="medium-5 columns">
+        <div id="boards">
 
-    </div>
-    <div id="boardsMessage">
+        </div>
+        <div id="boardsMessage">
 
+        </div>
     </div>
-</div>
+</section>
+<section class="row">
+    <div class="actionBlock">
+        <a class="btn btn-reset">Reset</a>
+    </div>
+</section>
 {% endblock %}
 
 
@@ -18,5 +25,8 @@
 
     Game.addPlayer('boussad');
     Game.addPlayer('gabriel');
+
+    document.querySelector('.btn-reset').addEventListener('click', Interactive.loadButtonReset);
+
 </script>
 {% endblock %}

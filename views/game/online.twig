@@ -7,14 +7,22 @@
             <h2 class="text-center ">Recherche d'une partie</h2>
         </div>
     </header>
-    <main class="row">
-        <div id="searchgameBlock" class="hidden medium-5 columns callout">
-            <a id="searchgame" class="btn">Recherche d'une partie</a>
-        </div>
+    <main>
+        <section class="row">
+            <div id="winSplash" class="hidden medium-5 columns callout">
+                <h3 class="text-center">Victoire !</h3>
+            </div>
+        </section>
 
-        <div id="searchgameleaveBlock" class="medium-5 columns callout">
-            <a id="searchgameleave" class="btn">Quitter la recherche d'une partie</a>
-        </div>
+        <section class="row">
+            <div id="searchgameBlock" class="hidden medium-5 columns">
+                <a id="searchgame" class="btn">Rechercher une partie</a>
+            </div>
+
+            <div id="searchgameleaveBlock" class="medium-5 columns">
+                <a id="searchgameleave" class="btn">Quitter la recherche de partie</a>
+            </div>
+        </section>
     </main>
 </section>
 
@@ -36,8 +44,21 @@
 
     Interactive.searchGame();
 
-    searchgame.addEventListener('click', Interactive.searchGame);
-    searchgameleave.addEventListener('click', Interactive.searchGameLeave);
+    searchgame.addEventListener('click', function(e){
+
+        Interactive.searchGame(e);
+
+        window.addEventListener('beforeunload', Interactive.beforeleavePage);
+        window.addEventListener('unload', Interactive.leavePage);
+
+    });
+    searchgameleave.addEventListener('click', function(e){
+
+        Interactive.searchGameLeave(e);
+
+        window.removeEventListener('beforeunload', Interactive.beforeleavePage);
+        window.removeEventListener('unload', Interactive.leavePage);
+    });
 
     socket.on('game find', function(msg){
 
@@ -69,6 +90,11 @@
         else if(action.action == 'leaveGame'){
 
             pushMessage(action);
+            Interactive.screenEndGame(action);
+            Online.online = false;
+
+            window.removeEventListener('beforeunload', Interactive.beforeleavePage);
+            window.removeEventListener('unload', Interactive.leavePage);
 
         }
 
