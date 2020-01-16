@@ -19,7 +19,10 @@ class gameController extends Controller{
 
         this.init();
 
-        this.view.mode = req.params.mode;
+        this.view.mode = 0;
+        if(req.params.mode <= 2){
+            this.view.mode = req.params.mode;
+        }
 
         return this._res.render('game/local.twig', this.view)
     }
