@@ -1,0 +1,58 @@
+#containerMessage{
+    position: relative;
+
+    min-height: 45vh;
+    max-height: 45vh;
+
+    margin: auto;
+    padding: 1rem;
+
+    overflow: auto;
+
+    form {
+        width: 100%;
+
+        padding: 3px;
+        bottom: 0;
+
+        background: #000;
+
+        input {
+            width: 90%;
+
+            padding: 10px;
+            margin-right: .5%;
+
+            border: 0;
+        }
+
+        button {
+            width: 9%;
+
+            padding: 10px;
+
+            background: rgb(130, 224, 255);
+            border: none;
+        }
+    }
+    #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        margin-bottom: 40px;
+
+        li {
+            padding: 5px 10px;
+
+            &:nth-child(odd) {
+                background: #eee;
+            }
+
+            &.type-erreur{
+                color: red;
+            }
+        }
+    }
+
+}
