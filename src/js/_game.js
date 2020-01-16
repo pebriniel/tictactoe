@@ -24,6 +24,10 @@ var Game = {
         }
     },
 
+    getPlayers: function(){
+        return this._joueurs;
+    },
+
     addPlayer: function(session){
         player = new Player();
 
