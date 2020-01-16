@@ -26,7 +26,7 @@ app.set("twig options", {
 app.use('/static', express.static(__dirname + '/dist'));
 
 app.get('/', function(req, res){
-    new indexRoute().exec(req, res);
+    new gameRoute().select(req, res);
 });
 
 app.get('/chat', function(req, res){
