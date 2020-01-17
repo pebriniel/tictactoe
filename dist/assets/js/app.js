@@ -61,8 +61,6 @@ const Board = class {
 
                 returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
 
-                console.log(returnPlayer);
-
                 if(returnPlayer != currentPlayer){
                     victoire = 0;
                     currentPlayer = returnPlayer;
@@ -72,6 +70,7 @@ const Board = class {
                 }
 
                 if(victoire == (Game._max -1)){
+
                     return returnPlayer;
                 }
             }
@@ -99,7 +98,54 @@ const Board = class {
 
             elements = document.querySelectorAll(`div.case-${indexPlayer}${_class}`);
 
+            //Si il y a le bon nombre de case cocher par ligne/column et que l'on ne fait pas une vérification diagonal
             if(elements.length == Game._max || (elements.length && _returnElement)){
+
+                //Si la condition de victoire dépasse le nombre de case
+                if(Game._max > 3 && !(elements.length && _returnElement)){
+
+                    let victoire = 1;
+                    let lastLine = null;
+                    let lastColumn = null;
+
+                    //On passe élément par élément pour vérifier le bon ordre des cases (éviter les XOXXX mais bien avoir 0XXXX)
+                    elements.forEach( element => {
+
+                        //On initie les valeurs le départ en parsant
+                        if(lastLine == null && lastColumn == null){
+                            lastLine = parseInt(element.dataset.line);
+                            lastColumn = parseInt(element.dataset.column);
+
+                            victoire ++;
+                        }
+
+                        //Nous comparons n+1 la valeur précédente avec la nouvelle
+                        if((lastLine != element.dataset.line && (lastLine + 1) == element.dataset.line) || (lastColumn != element.dataset.column && (lastColumn + 1) == element.dataset.column))
+                        {
+                            //Si le n1 corresponds nous attributons les nouvelles valeurs à nos variables pour les prochaines vérifications
+                            lastLine = parseInt(element.dataset.line);
+                            lastColumn = parseInt(element.dataset.column);
+                            victoire ++;
+                        }
+                        // Sinon, on réinitie le total de victoire à 1
+                        else{
+                            victoire = 1;
+                        }
+
+
+
+                        //Si nous atteignons la condition de victoire, nous mettons un terme à au forEach
+                        if(victoire == Game._max){
+                            return indexPlayer;
+                        }
+                    });
+
+                    if(victoire < Game._max){
+                        return null;
+                    }
+                }
+
+                //Nous retourons l'index du joueur Gagnant.
                 return indexPlayer;
             }
         }
