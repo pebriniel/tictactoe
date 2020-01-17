@@ -59,20 +59,25 @@ const Board = class {
                     column = Math.abs(column);
                 }
 
-                returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
+                returnPlayer = this.checkWinElement(`[data-line~="${line}"][data-column~="${column}"]`, true);
 
-                if(returnPlayer != currentPlayer){
-                    victoire = 0;
+                if(returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
+                    victoire = 1;
                     currentPlayer = returnPlayer;
                 }
-                else if(returnPlayer != null || returnPlayer != undefined){
+                else{
                     victoire ++;
                 }
 
-                if(victoire == (Game._max -1)){
-
+                if(victoire == Game._max){
                     return returnPlayer;
                 }
+            }
+
+            if(c == (Game.getFormat(Game.getLevel() -1)) || c == 0)
+            {
+                victoire = 1;
+                currentPlayer = returnPlayer;
             }
         }
     }
@@ -82,7 +87,7 @@ const Board = class {
 
         for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
 
-            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`), true) {
+            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`)) {
 
                 return victoire;
             }
@@ -151,6 +156,14 @@ const Board = class {
         }
 
         return null;
+    }
+
+    checkDraw()
+    {
+        const format = Game.getFormat(Game.getLevel());
+        const count = document.querySelectorAll(`div[data-player]`);
+
+        return count.length == (format * format);
     }
 
     checkWin() {
@@ -295,6 +308,13 @@ var Interactive = {
             }
         }
 
+        if(typeof drawSplash !== 'undefined'){
+            drawSplash.classList.add('hidden');
+            if(action.draw != undefined && action.draw){
+                drawSplash.classList.remove('hidden');
+            }
+        }
+
         if(typeof searchgameBlock !== 'undefined'){
             searchgameBlock.classList.remove('hidden');
         }
@@ -336,8 +356,10 @@ var Interactive = {
             Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
-                console.log('ok');
                 Interactive.screenEndGame({win: 1});
+            }
+            if(Game.getBoard().checkDraw()){
+                Interactive.screenEndGame({draw: 1});
             }
         }
         else if(variable == -2)

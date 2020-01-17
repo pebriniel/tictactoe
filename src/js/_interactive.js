@@ -37,6 +37,13 @@ var Interactive = {
             }
         }
 
+        if(typeof drawSplash !== 'undefined'){
+            drawSplash.classList.add('hidden');
+            if(action.draw != undefined && action.draw){
+                drawSplash.classList.remove('hidden');
+            }
+        }
+
         if(typeof searchgameBlock !== 'undefined'){
             searchgameBlock.classList.remove('hidden');
         }
@@ -78,8 +85,10 @@ var Interactive = {
             Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
-                console.log('ok');
                 Interactive.screenEndGame({win: 1});
+            }
+            if(Game.getBoard().checkDraw()){
+                Interactive.screenEndGame({draw: 1});
             }
         }
         else if(variable == -2)
