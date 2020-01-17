@@ -1,0 +1,45 @@
+#boards
+{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#boards .case-0::before
+{
+    content: '';
+
+    background: url('icons/ubuntu.png') center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+
+}
+#boards .case-1::before
+{
+    content: '';
+
+    background: url('icons/windows.png') center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+
+}
+#boards .line
+{
+    display: block;
+}
+#boards .case
+{
+    text-align: center;
+    font-size: 1.5rem;
+
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+#boards .line:nth-child(2n+1) .case:nth-child(2n+1){
+    background-color: rgba(0, 0, 0, 0.3);
+}
+#boards .case:hover{
+    border: 2px solid red;
+}
+#boards .case:hover:not([data-player="1"]):not([data-player="0"])
+{
+    background-color: #14967c!important;
+    border: none;
+}

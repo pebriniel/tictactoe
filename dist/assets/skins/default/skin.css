@@ -1,0 +1,22 @@
+#boards
+{
+  background: red;
+}
+#boards .case-0::before
+{
+    content: 'X';
+}
+#boards .case-1::before
+{
+    content: 'O';
+}
+#boards .line
+{
+    display: block;
+}
+#boards .case
+{
+    font-size: 1.5rem;
+    color: white;
+    background: #226499;
+}
