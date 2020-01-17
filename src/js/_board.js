@@ -4,7 +4,6 @@ const Board = class {
     constructor(idElement = 'boards') {
         this._idElement = idElement;
         this._board = document.querySelector(`#${idElement}`);
-        console.log(this._board);
     }
 
     generateBoard() {
@@ -70,7 +69,7 @@ const Board = class {
                     victoire ++;
                 }
 
-                if(victoire == Game._max){
+                if(victoire == (Game._max -1)){
                     return returnPlayer;
                 }
             }
@@ -82,7 +81,7 @@ const Board = class {
 
         for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
 
-            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`, false)) {
+            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`)) {
 
                 return victoire;
             }
@@ -124,8 +123,6 @@ const Board = class {
         if(!victoire){
             victoire = this.checkWinElementDiagonal(true);
         }
-
-        console.log(victoire);
 
         return victoire;
     }
