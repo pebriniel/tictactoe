@@ -82,7 +82,7 @@ const Board = class {
 
         for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
 
-            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`)) {
+            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`), true) {
 
                 return victoire;
             }
