@@ -5596,9 +5596,17 @@ section a {
   margin-top: 1rem;
   background: red; }
   #boards .case-0::before {
-    content: 'X'; }
+    content: 'X';
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center; }
   #boards .case-1::before {
-    content: 'O'; }
+    content: 'O';
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center; }
   #boards .line {
     display: block; }
   #boards .case {
@@ -5621,10 +5629,22 @@ section a {
       padding: 2rem; }
       #mode main div .launch a {
         display: block; }
+        #mode main div .launch a.active {
+          background: #14967c; }
 
 #searchBlock div {
   margin: auto;
   text-align: center; }
+
+#options a {
+  display: inline-block;
+  margin: 0.5rem;
+  width: 100%; }
+  @media screen and (min-width: 64em) {
+    #options a {
+      width: 48%; } }
+  #options a.active {
+    background: #14967c; }
 
 .actionBlock {
   position: relative;

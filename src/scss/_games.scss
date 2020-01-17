@@ -16,9 +16,23 @@
 
     .case-0::before {
         content: 'X';
+
+        display: flex;
+        height: 100%;
+
+        align-items: center;
+
+        justify-content: center;
     }
     .case-1::before {
         content: 'O';
+
+        display: flex;
+        height: 100%;
+
+        align-items: center;
+
+        justify-content: center;
     }
     .line{
         display: block;
@@ -62,6 +76,10 @@
 
                 a{
                     display: block;
+
+                    &.active{
+                        background: #14967c;
+                    }
                 }
             }
         }
@@ -72,6 +90,24 @@
     div{
         margin: auto;
         text-align: center;
+    }
+}
+
+
+#options {
+
+    a{
+        display: inline-block;
+        margin: 0.5rem;
+        width: 100%;
+
+        @media screen and (min-width: 64em) {
+            width: 48%;
+        }
+
+        &.active{
+            background: #14967c;
+        }
     }
 }
 

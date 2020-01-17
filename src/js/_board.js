@@ -72,6 +72,12 @@ const Board = class {
                 if(victoire == Game._max){
                     return returnPlayer;
                 }
+
+                if(line == 0){
+                    victoire = 1;
+                    currentPlayer = returnPlayer;
+                }
+
             }
 
             if(c == (Game.getFormat(Game.getLevel() -1)) || c == 0)

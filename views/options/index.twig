@@ -1,5 +1,39 @@
 {% extends 'base.twig' %}
 
-{% block header %}
-    <h3>Options</h3>
+{% block content %}
+<section>
+    <header class="row">
+        <div class="medium-12 columns">
+            <h2 class="text-center">Options</h2>
+        </div>
+    </header>
+</section>
+
+<section id="options">
+    <header class="row">
+        <div class="medium-12 columns">
+            <h3 class="text-center">Skins</h3>
+        </div>
+    </header>
+    <main class="row">
+        <div class="medium-12 columns callout skins">
+            <a data-skin="default">Défaut</a>
+            <a data-skin="OS">Windows vs Linux</a>
+            <a data-skin="GDC">Guerre des Console</a>
+
+        </div>
+    </main>
+</section>
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+        document.querySelectorAll('.skins a').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                Options.ButtonSelectSkin(element);
+            });
+        })
+    </script>
 {% endblock %}
