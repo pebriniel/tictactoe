@@ -40,8 +40,6 @@ const Board = class {
             el = columns[action.x];
         }
 
-        console.log(action);
-
         el.dataset.player = action.player;
         el.classList.add(`case-${action.player}`);
     }
@@ -65,7 +63,7 @@ const Board = class {
                 returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
 
                 if(returnPlayer != currentPlayer){
-                    victoire = 1;
+                    victoire = 0;
                     currentPlayer = returnPlayer;
                 }
                 else if(returnPlayer != null || returnPlayer != undefined){
@@ -73,7 +71,6 @@ const Board = class {
                 }
 
                 if(victoire == Game._max){
-                    console.log('victoire');
                     return returnPlayer;
                 }
             }
@@ -85,7 +82,7 @@ const Board = class {
 
         for(let column = 0; column < Game.getFormat(Game.getLevel()); column ++){
 
-            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`)) {
+            if(victoire = this.checkWinElement(`[data-${name}~="${column}"]`, false)) {
 
                 return victoire;
             }
@@ -289,9 +286,9 @@ var Interactive = {
         else if(variable == true){
             const currentPlayer = Game.currentPlayer();
 
-            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
-
             Game.alternatePlayer();
+
+            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
                 console.log('ok');

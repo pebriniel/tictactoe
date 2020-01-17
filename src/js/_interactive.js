@@ -73,9 +73,9 @@ var Interactive = {
         else if(variable == true){
             const currentPlayer = Game.currentPlayer();
 
-            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
-
             Game.alternatePlayer();
+
+            Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
                 console.log('ok');
