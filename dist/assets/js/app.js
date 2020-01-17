@@ -61,6 +61,8 @@ const Board = class {
 
                 returnPlayer = this.checkWinElement(`[data-line~="${column}"][data-column~="${line}"]`, true);
 
+                console.log(returnPlayer);
+
                 if(returnPlayer != currentPlayer){
                     victoire = 0;
                     currentPlayer = returnPlayer;
