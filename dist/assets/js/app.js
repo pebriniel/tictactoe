@@ -198,19 +198,26 @@ var Game = {
         2: 7 // 7x7
     },
 
-    init: function(mode = 0){
-
+    init: function(mode = null)
+    {
         this._joueurs = [];
         this._currentPlayer = 0;
-        this._level = mode;
         this._max = 3;
 
-        if(mode != 0){
+        if(mode != null && mode != 'null' && mode != undefined){
+            this.setLevel(mode);
+        }
+
+        if(this._level != 0){
             this._max = 4;
         }
 
-        this._board = new Board();
-        this._board.generateBoard();
+        this.setBoard(new Board());
+        this.getBoard().generateBoard();
+
+        if(this.getLevel() == undefined){
+            this.setLevel(0);
+        }
     },
 
     clear: function(relaunch = false, action = {}){
@@ -249,6 +256,10 @@ var Game = {
         this._currentPlayer = (this._currentPlayer) ? 0 : 1;
     },
 
+    setLevel: function(level){
+        this._level = level;
+    },
+
     getLevel: function(){
         return this._level;
     },
@@ -262,6 +273,10 @@ var Game = {
 
     getFormats: function(){
         return this._format;
+    },
+
+    setBoard: function(board = null){
+        this._board = board;
     },
 
     getBoard: function(){
