@@ -97,56 +97,74 @@ class socket extends eventEmitter {
     {
         var self = this;
 
-        if(this.searchPlayers.length == 2){
+        // Si nous avons le bon nombre de joueur sur le serveur.
+        if(this.searchPlayers.length == this.getMaxPlayer()){
             let _uniqid = uniqid();
             games[_uniqid] = new Game();
 
             var i = 0;
-            for( i = 0; i <= self.searchPlayers.length; i ++){
-                let joueur = {};
+            for( i = 0; i <= this.getMaxPlayer(); i ++){
 
-                joueur.searchValue = self.searchPlayers.shift();
-
+                let joueur = self.searchPlayers.shift();
 
                 let namespace = null;
                 let ns = io.of(namespace || "/");
 
-                let socket = ns.connected[joueur.searchValue];
+                let socket = ns.connected[joueur];
 
                 games[_uniqid].addPlayer('boussad', socket);
 
-                if(games[_uniqid]._joueurs.length == 2){
+                games[_uniqid].init();
+
+                // Si notre board contient bien le bon nombre de joueurs nécessaires à la partie
+                if(games[_uniqid]._joueurs.length == this.getMaxPlayer()){
 
                     self.start(games[_uniqid]);
 
                     //On attends les actions du joueur 1
-                    console.log(games[_uniqid]._joueurs[0]);
                     games[_uniqid]._joueurs[0]._socket.on('game action', async function(action){
-                        action = n.getGameAction(action, 0);
+
+                        try
+                        {
+
+                            action = await n.getGameAction(games[_uniqid], action, 0);
 
 
-                        let victoire = await games[_uniqid].getBoard().checkWin();
-                        n.sendWinStatus(victoire);
+                            let victoire = await games[_uniqid].getBoard().checkWin();
+                            n.sendWinStatus(games[_uniqid], victoire);
 
-                        console.log(action);
-                        //Si il y a une erreur, on envoie le message d'erreur au joueur 1
-                        if(action.type == 'erreur'){
-                            games[_uniqid]._joueurs[0]._socket.emit('game action', JSON.stringify(action));
+                            console.log(action);
+                            //Si il y a une erreur, on envoie le message d'erreur au joueur 1
+                            if(action.type == 'erreur'){
+                                games[_uniqid]._joueurs[0]._socket.emit('game action', JSON.stringify(action));
+                            }
+
                         }
+                        catch{
 
+                        }
                     });
 
                     //On attends les actions du joueur 20
                     games[_uniqid]._joueurs[1]._socket.on('game action', async function(action){
-                        action = n.getGameAction(action, 1);
 
-                        let victoire = await  games[_uniqid].getBoard().checkWin();
-                        n.sendWinStatus(victoire);
+                        try
+                        {
 
-                        console.log(action);
-                        //Si il y a une erreur, on envoie le message d'erreur au joueur 2
-                        if(action.type == 'erreur'){
-                            games[_uniqid]._joueurs[1]._socket.emit('game action', JSON.stringify(action));
+                            action = await n.getGameAction(games[_uniqid], action, 1);
+                            console.log(action);
+
+                            let victoire = await games[_uniqid].getBoard().checkWin();
+                            n.sendWinStatus(games[_uniqid], victoire);
+
+                            console.log(action);
+                            //Si il y a une erreur, on envoie le message d'erreur au joueur 2
+                            if(action.type == 'erreur'){
+                                games[_uniqid]._joueurs[1]._socket.emit('game action', JSON.stringify(action));
+                            }
+                        }
+                        catch{
+
                         }
 
                     });
@@ -157,9 +175,9 @@ class socket extends eventEmitter {
                         action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
                         games[_uniqid]._joueurs[1]._socket.emit('game action', JSON.stringify(action));
 
-                        delete games[_uniqid];
                         delete games[_uniqid]._joueurs[0];
                         delete games[_uniqid]._joueurs[1];
+                        delete games[_uniqid];
 
                     });
 
@@ -169,9 +187,9 @@ class socket extends eventEmitter {
                         action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
                         games[_uniqid]._joueurs[0]._socket.emit('game action', JSON.stringify(action));
 
-                        delete games[_uniqid];
                         delete games[_uniqid]._joueurs[0];
                         delete games[_uniqid]._joueurs[1];
+                        delete games[_uniqid];
 
                     });
                 }
@@ -216,7 +234,7 @@ class socket extends eventEmitter {
 
         let socket = this.socket;
 
-        delete allPlayers[socket.id];
+        delete this.allPlayers[socket.id];
 
         this.searchPlayers = this.searchPlayers.filter(function (el) {
           return el != socket.id;
@@ -250,12 +268,12 @@ class socket extends eventEmitter {
             });
 
             socket.on('chat message', function(msg){
-                io.emit('chat message', allPlayers[socket.id].username+ ' '+msg);
+                io.emit('chat message', self.allPlayers[socket.id].username+ ' '+msg);
                 // io.sockets.socket(socketId).emit(msg);
             });
 
             socket.on('chat username', function(msg){
-                allPlayers[socket.id].username = msg;
+                self.allPlayers[socket.id].username = msg;
             });
 
             //On supprime le joueur du tableau
@@ -277,7 +295,7 @@ class socket extends eventEmitter {
 
         //Message d'accueil
         game.getInteractive().setActionMessage('valide', `Vous commencez !`);
-        game._joueurs[0].emit('game action', JSON.stringify(game.getInteractive().getAction()));
+        game._joueurs[0]._socket.emit('game action', JSON.stringify(game.getInteractive().getAction()));
 
         game.getInteractive().setActionMessage('valide', `Vous êtes le deuxième joueur ! `);
         game._joueurs[1]._socket.emit('game action', JSON.stringify(game.getInteractive().getAction()));
@@ -297,35 +315,45 @@ class socket extends eventEmitter {
 
 
 
-    getGameAction(action, player){
+    async getGameAction(game, action, player){
 
         action = JSON.parse(action);
-        games[_uniqid].getInteractive().ClickOnCase(action, player);
 
-        action = games[_uniqid].getInteractive().getAction();
+        try{
 
-        // S'il n'y a pas d'erreur on envoie les informations aux joueurs
-        if(action.type != 'erreur'){
-            socketPlayer1.emit('game action', JSON.stringify(action));
-            socketPlayer2.emit('game action', JSON.stringify(action));
+            var test = await game.getInteractive().ClickOnCase(action, player);
+
+            action = game.getInteractive().getAction();
+
+            // S'il n'y a pas d'erreur on envoie les informations aux joueurs
+            if(action.type != 'erreur'){
+                game._joueurs[0]._socket.emit('game action', JSON.stringify(action));
+                game._joueurs[1]._socket.emit('game action', JSON.stringify(action));
+            }
+
+            return action;
+        }
+        catch{
+
         }
 
-        return action;
     }
 
 
-    sendWinStatus(victoire){
+
+
+    sendWinStatus(game, victoire){
 
         let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
         let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
 
         if(victoire == 0){
-            socketPlayer1.emit('game action', JSON.stringify(actionWin));
-            socketPlayer2.emit('game action', JSON.stringify(actionLoose));
+            game._joueurs[0]._socket.emit('game action', JSON.stringify(actionWin));
+            game._joueurs[1]._socket.emit('game action', JSON.stringify(actionLoose));
         }
         else if(victoire == 1){
-            socketPlayer1.emit('game action', JSON.stringify(actionLoose));
-            socketPlayer2.emit('game action', JSON.stringify(actionWin));
+            game._joueurs[0]._socket.emit('game action', JSON.stringify(actionLoose));
+            game._joueurs[1]._socket.emit('game action', JSON.stringify(actionWin));
         }
 
         //On supprime le Board
@@ -339,8 +367,16 @@ class socket extends eventEmitter {
 
 class morpion extends socket {
 
-    constructor(){
+    constructor()
+    {
         super();
+
+        this.maxPlayer = 2;
+    }
+
+    getMaxPlayer()
+    {
+        return this.maxPlayer;
     }
 
 }
@@ -349,9 +385,9 @@ var n = new morpion();
 
 n.log();
 
-setInterval( function() {
+setInterval( async function() {
 
-    n.searchInterval();
+    let v = await n.searchInterval();
 
     // if(searchPlayers.length == 2){
     //
