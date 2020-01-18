@@ -23,10 +23,11 @@ const Game = class {
         this._interactive.init(this);
     }
 
-    addPlayer(username = 'player'){
+    addPlayer(username = 'player', socket = null){
         const player = new Player();
 
         player.setUsername(username);
+        player.setSocket(socket);
 
         this._joueurs.push(player);
     }

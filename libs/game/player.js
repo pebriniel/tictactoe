@@ -5,6 +5,8 @@ const Player = class {
         this._session = null;
         this._username = 'player';
         this._score = 0;
+        
+        this._socket = null;
     }
 
     getUsername() {
@@ -13,6 +15,14 @@ const Player = class {
 
     setUsername(username) {
         this._username = username;
+    }
+
+    getSocket() {
+        return this._socket;
+    }
+
+    setSocket(socket) {
+        this._socket = socket;
     }
 
     getScore() {
