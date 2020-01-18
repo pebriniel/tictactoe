@@ -1,0 +1,11 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+    {% if liste is defined and liste %}
+        {% for user in liste %}
+            <a href="/utilisateur/{{ user.id }}/commande/">Commande</a> - {{ user.login }} - {{ user.email }} <br/>
+        {% endfor %}
+    {% else %}
+        -- aucun utilisateur --
+    {% endif %}
+{% endblock %}

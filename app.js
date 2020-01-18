@@ -1,4 +1,6 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require("body-parser");
 
 const app = new express();
 
@@ -15,6 +17,11 @@ const indexRoute = require('./libs/controllers/index.js');
 const chatRoute = require('./libs/controllers/chat.js');
 const gameRoute = require('./libs/controllers/game.js');
 const optionsRoute = require('./libs/controllers/options.js');
+const userRoute = require('./libs/controllers/user.js');
+
+// let controller = require('./libs/controller.js');
+// controller = new controller();
+// controller.init();
 
 const Game = require('./libs/game/game.js');
 
@@ -22,6 +29,10 @@ app.set("twig options", {
     allow_async: true, // Allow asynchronous compiling
     strict_variables: false
 });
+
+app.use(cookieParser());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/static', express.static(__dirname + '/dist'));
 
@@ -31,6 +42,14 @@ app.get('/', function(req, res){
 
 app.get('/chat', function(req, res){
     new chatRoute().exec(req, res);
+});
+
+app.all('/user/login', function(req, res){
+    new userRoute().login(req, res);
+});
+
+app.all('/user/logout', function(req, res){
+    new userRoute().logout(req, res);
 });
 
 app.get('/game/select', function(req, res){
@@ -51,7 +70,6 @@ app.get('/options', function(req, res){
 
 
 // Socket.io
-
 var allPlayers = [];
 var searchPlayers = [];
 var games = [];
@@ -62,10 +80,33 @@ io.on('connection', function(socket){
     allPlayers[socket.id] = {};
     allPlayers[socket.id].username = 'boussad';
 
-    socket.on('game search', function(action){
-        searchPlayers.push(socket.id);
-        console.log('Recherche de partie');
-        console.log(searchPlayers);
+    socket.on('game search', async function(action){
+        // Nous vérifions que l'utilisateur est bien connecté...
+        try{
+
+            let status = await controller.user.isConnected('evs2728ik5ix1qdi');
+
+            // S'il est bien connecté, on lance la recherche de partie
+            if(status){
+
+                searchPlayers.push(socket.id);
+                console.log('Recherche de partie');
+                console.log(searchPlayers);
+            }
+
+        }
+        catch{
+
+            delete allPlayers[socket.id];
+
+            action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
+            socket.emit('game action', JSON.stringify(action));
+
+            searchPlayers = searchPlayers.filter(function (el) {
+              return el != socket.id;
+            });
+        }
+
     });
 
     socket.on('game leavesearch', function(action){
