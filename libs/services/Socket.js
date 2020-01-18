@@ -22,7 +22,6 @@ class Socket extends eventEmitter {
         this.GameObject = new Game();
 
         this.on('search', this.search);
-        this.on('leave', this.leave);
         this.on('disconnect', this.disconnect);
 
         this.on('gameAction', this.gameAction);
@@ -42,7 +41,7 @@ class Socket extends eventEmitter {
             games[_uniqid] = new Game();
 
             var i = 0;
-            for( i = 0; i <= this.GameObject.getMaxPlayer(); i ++){
+            for( i = 0; i < this.GameObject.getMaxPlayer(); i ++){
 
                 let joueur = self.searchPlayers.shift();
 
@@ -53,10 +52,19 @@ class Socket extends eventEmitter {
 
                 games[_uniqid].addPlayer('boussad', socket);
 
+                console.log(_uniqid);
+
+                let start = true;
+                if(!socket){
+                    start = false;
+                }
+
                 games[_uniqid].init();
 
                 // Si notre board contient bien le bon nombre de joueurs nécessaires à la partie
-                if(games[_uniqid]._joueurs.length == this.GameObject.getMaxPlayer()){
+                if(start && games[_uniqid]._joueurs.length == this.GameObject.getMaxPlayer()){
+
+                    console.log('connexion');
 
                     self.start(games[_uniqid]);
 
@@ -64,21 +72,33 @@ class Socket extends eventEmitter {
 
                         // Les actions des joueurs
                         games[_uniqid]._joueurs[currentPlayer]._socket.on('game action', (action) => {
-                            self.emit('gameAction', games[_uniqid], action, currentPlayer);
+                            self.emit('gameAction', games[_uniqid], action, currentPlayer, _uniqid);
                         });
 
                         //En cas de déconnexion
                         games[_uniqid]._joueurs[currentPlayer]._socket.on('game leave', (action) => {
-                            self.emit('gameLeave', games[_uniqid], action, currentPlayer);
+                            self.emit('gameLeave', games[_uniqid], action, currentPlayer, uniqid);
                         });
                     }
 
+                }
+                else if(!start){
+                    games[_uniqid].getPlayers().forEach( player => {
+                        if(player.getSocket()){
+                            player.getSocket().emit("game clear", 1);
+                            player.getSocket().emit("game search", 1);
+                        }
+                    })
+
+                    game = null;
+                    delete games[_uniqid];
+
+                    break;
                 }
 
             }
 
         }
-
 
     }
 
@@ -86,19 +106,6 @@ class Socket extends eventEmitter {
     {
 
         this.searchPlayers.push(this.socket.id);
-
-    }
-
-    leave()
-    {
-
-        let socket = this.socket;
-
-        delete this.allPlayers[socket.id];
-
-        this.searchPlayers = this.searchPlayers.filter(function (el) {
-          return el != socket.id;
-        });
 
     }
 
@@ -129,6 +136,12 @@ class Socket extends eventEmitter {
             self.allPlayers[socket.id].username = 'boussad';
 
             console.log(self.allPlayers);
+            console.log(games);
+
+            socket.once('disconnect', function () {
+                delete self.allPlayers[socket.id];
+                console.log(self.allPlayers);
+            });
 
             socket.on('game search', () => {
 
@@ -138,7 +151,7 @@ class Socket extends eventEmitter {
 
             socket.on('game leavesearch', function(action){
 
-                self.emit('leave');
+                self.emit('disconnect');
 
             });
 
@@ -209,39 +222,52 @@ class Socket extends eventEmitter {
 
     }
 
-    gameLeave(game, action, selectPlayer)
+    gameLeave(game, action, selectPlayer, uniqid)
     {
+        if(game._joueurs){
 
-        const listPlayers = game._joueurs;
-        delete listPlayers[selectPlayer];
+            const listPlayers = game._joueurs;
+            delete listPlayers[selectPlayer];
 
-        action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
+            action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
 
-        listPlayers.forEach( item  => {
-            item._socket.emit('game action', JSON.stringify(action));
-        } );
+            listPlayers.forEach( item  => {
+                if(item._socket){
+                    item._socket.emit('game action', JSON.stringify(action));
+                }
+            } );
+            
+        }
 
         // delete game;
+        delete games[uniqid];
     }
 
-    async gameAction(game, action, selectPlayer)
+    async gameAction(game, action, selectPlayer, _uniqid)
     {
-        const listPlayers = game._joueurs;
+        const listPlayers = game.getPlayers();
 
-        action = await this.getGameAction(game, action, selectPlayer);
+        try{
 
-        let victoire = await game.getBoard().checkWin();
+            action = await this.getGameAction(game, action, selectPlayer);
+            let victoire = await game.getBoard().checkWin();
 
-        this.sendWinStatus(game, victoire);
+            this.sendWinStatus(game, victoire, _uniqid);
 
-        //Si il y a une erreur, on envoie le message d'erreur au joueur 1
-        if(action.type == 'erreur'){
-            listPlayers[selectPlayer]._socket.emit('game action', JSON.stringify(action));
+            //Si il y a une erreur, on envoie le message d'erreur au joueur 1
+            if(action.type == 'erreur'){
+                listPlayers[selectPlayer]._socket.emit('game action', JSON.stringify(action));
+            }
+        }
+        catch
+        {
+
         }
     }
 
 
-    sendWinStatus(game, victoire){
+    sendWinStatus(game, victoire, _uniqid)
+    {
 
         let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
         let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
@@ -256,11 +282,16 @@ class Socket extends eventEmitter {
         }
 
         //On supprime le Board
-        // if(victoire != undefined || victoire != null){
-        //     delete games[_uniqid];
-        //     delete socketPlayer1;
-        //     delete socketPlayer2;
-        // }
+        console.log('victoire'+victoire);
+        if(victoire != undefined || victoire != null){
+
+            delete game._joueurs[1]._socket;
+            delete game._joueurs[1]._socket;
+
+            game = null;
+            delete games[_uniqid];
+
+        }
     }
 }
 

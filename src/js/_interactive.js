@@ -65,8 +65,9 @@ var Interactive = {
     },
 
     cleanBoard: function(action = {}){
-        this.screenEndGame(action);
         boards.innerHTML = '';
+        this.screenEndGame(action);
+        console.log('CLEAR');
     },
 
     //Si le joueur clique sur une case

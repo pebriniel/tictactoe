@@ -79,6 +79,8 @@
     socket.on('game action', function(action){
         action = JSON.parse(action);
 
+        console.log(action.action);
+
         if(action.action == 'ChangeCaseValue') {
 
             Game.getBoard().setCasePlayer(null, action);

@@ -34,8 +34,8 @@ var Game = {
 
         if(relaunch){
             this.init();
-            Game.addPlayer('boussad');
-            Game.addPlayer('gabriel');
+            Game.addPlayer('joueur1');
+            Game.addPlayer('joueur2');
         }
     },
 

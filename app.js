@@ -71,21 +71,8 @@ socket.connection();
 
 setInterval( async function() {
 
-    let v = await socket.searchInterval();
+    await socket.searchInterval();
 
-    // if(searchPlayers.length == 2){
-    //
-    //
-    //     } else {
-    //         if(socketPlayer1) {
-    //             socketPlayer1.emit("game clear", 1);
-    //             socketPlayer1.emit("game search", 1);
-    //         }
-    //         if(socketPlayer2) {
-    //             socketPlayer2.emit("game clear", 1);
-    //             socketPlayer2.emit("game search", 1);
-    //         }
-    //     }
 }, 4000);
 
 http.listen(port, function(){

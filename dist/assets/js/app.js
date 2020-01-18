@@ -231,8 +231,8 @@ var Game = {
 
         if(relaunch){
             this.init();
-            Game.addPlayer('boussad');
-            Game.addPlayer('gabriel');
+            Game.addPlayer('joueur1');
+            Game.addPlayer('joueur2');
         }
     },
 
@@ -357,8 +357,9 @@ var Interactive = {
     },
 
     cleanBoard: function(action = {}){
-        this.screenEndGame(action);
         boards.innerHTML = '';
+        this.screenEndGame(action);
+        console.log('CLEAR');
     },
 
     //Si le joueur clique sur une case

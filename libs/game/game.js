@@ -34,6 +34,11 @@ const Game = class {
         this._joueurs.push(player);
     }
 
+    getPlayers()
+    {
+        return this._joueurs;
+    }
+
     // Si player est égal à false, on renvoie la valeur brute de la variables
     // sinon, on renvoie les données du joueurs
     currentPlayer(player = false){
