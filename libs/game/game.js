@@ -19,7 +19,7 @@ const Game = class {
         this._board = new Board();
         this._board.generateBoard(this.getLevel(), this.getFormat(this.getLevel()));
 
-        this._interactive = Interactive;
+        this._interactive = new Interactive();
         this._interactive.init(this);
     }
 

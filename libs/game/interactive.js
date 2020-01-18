@@ -1,19 +1,20 @@
 const Game = require('./game.js');
 
-var Interactive = {
+const Interactive = class {
 
-    init: function(game){
+    init(game)
+    {
         this._game = game;
-    },
+    }
 
     //Si le joueur clique sur une case
-    ClickOnCase: function(action, player) {
+    ClickOnCase(action, player) {
         const currentPlayer = this._game.currentPlayer();
 
         if(currentPlayer == player)
         {
 
-            const variable = Interactive.ChangeCaseValue(action);
+            const variable = this.ChangeCaseValue(action);
 
             if(variable == true)
             {
@@ -25,21 +26,22 @@ var Interactive = {
             else{
                 if(variable == -2)
                 {
-                    this.setActionValide(`La case n'est plus disponible`);
+                    this.setActionValide(`La case n'est plus disponible 2`);
                 }
                 else
                 {
-                    this.setActionError(`La case n'est pas disponible`);
+                    this.setActionError(`La case n'est pas disponible 2`);
                 }
             }
         }
         else{
-            this.setActionError(`Ce n'est pas votre tour`);
+            this.setActionError(`Ce n'est pas votre tour 2`);
         }
-    },
+
+    }
 
     //On vérifie les valeurs de la case
-    ChangeCaseValue: function(action){
+    ChangeCaseValue(action){
         const format = this._game.getFormat(this._game.getLevel());
         const board = this._game._board;
         const currentPlayer = this._game.currentPlayer();
@@ -61,25 +63,25 @@ var Interactive = {
         else{
             return false;
         }
-    },
+    }
 
-    setActionMessage: function(type, message) {
+    setActionMessage(type, message) {
         this.setAction({action: 'pushMessage', type: type, 'message': message});
-    },
+    }
 
-    setActionError: function(message) {
+    setActionError(message) {
         this.setActionMessage('erreur', message);
-    },
+    }
 
-    setActionValide: function(message) {
+    setActionValide(message) {
         this.setActionMessage('valide', message)
-    },
+    }
 
-    setAction: function(value) {
+    setAction(value) {
         this._action = value;
-    },
+    }
 
-    getAction: function() {
+    getAction() {
         return this._action;
     }
 }
