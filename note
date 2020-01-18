@@ -1,6 +1,52 @@
     - veiller à bien fermer la connexion entre les deux joueurs en cas de déconnexion, ou de fin de partie.
     - problème avec la recherche de partie, il est possible de s'inscrire un nombre illimité de fois
 
+    Refonte du serveur :
+        Board
+            generateBoard
+            getValue
+            setValue
+            
+            async checkWinElementDiagonal
+            async checkWinHorizontal
+            async checkWinElement
+            async checkWin
+        Game
+            addPlayer
+            currentPlayer
+            alternatePlayer
+
+            getLevel
+            getBoard
+
+            getFormat
+            getFormats
+
+            getInteractive
+
+        Interactive
+            ClickOnCase
+            ChangeCaseValue
+
+            setActionMessage
+            setActionError
+            setActionValide
+
+            setAction
+            getAction
+        Player
+            getUsername
+            setUsername
+
+            getSocket
+            setSocket
+
+            getScore
+            setScore
+
+            addScore
+            removeScore
+
     Jeu jouable au clavier ?
 
     Boards

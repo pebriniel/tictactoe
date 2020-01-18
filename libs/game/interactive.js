@@ -26,11 +26,11 @@ const Interactive = class {
             else{
                 if(variable == -2)
                 {
-                    this.setActionValide(`La case n'est plus disponible 2`);
+                    this.setActionValide(`La case n'est plus disponible`);
                 }
                 else
                 {
-                    this.setActionError(`La case n'est pas disponible 2`);
+                    this.setActionError(`La case n'est pas disponible`);
                 }
             }
         }

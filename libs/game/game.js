@@ -13,6 +13,8 @@ const Game = class {
             0: 3, // 3x3
             1: 5 // 5x5
         };
+
+        this.maxPlayer = 2;
     }
 
     init(){
@@ -67,6 +69,11 @@ const Game = class {
 
     getInteractive(){
         return this._interactive;
+    }
+
+    getMaxPlayer()
+    {
+        return this.maxPlayer;
     }
 }
 
