@@ -60,6 +60,10 @@ class mysqlConnexion
         update(connexion, sql){
             this.queryOne(connexion, sql);
         }
+
+        insert(connexion, sql){
+            this.queryOne(connexion, sql);
+        }
 }
 
 module.exports = mysqlConnexion;

@@ -1,32 +1,49 @@
 
 
-const Player = class {
-    constructor() {
+const Player = class
+{
+
+    constructor(user = null)
+    {
         this._session = null;
-        this._username = 'player';
+
+        this._username = (user['login']) ? user['login'] : 'player';
+        this._id = (user['id']) ? user['id'] : null;
+
         this._score = 0;
     }
 
-    getUsername() {
+    getId()
+    {
+        return this._id;
+    }
+
+    getUsername()
+    {
         return this._username;
     }
 
-    setUsername(username) {
+    setUsername(username)
+    {
         this._username = username;
     }
 
-    getScore() {
+    getScore()
+    {
         return this._score;
     }
 
-    addScore(val = 1){
+    addScore(val = 1)
+    {
         this.setScore(val);
     }
-    removeScore(val = -1){
+    removeScore(val = -1)
+    {
         this.setScore(val);
     }
 
-    setScore(val) {
+    setScore(val)
+    {
         this._score += val;
     }
 }
