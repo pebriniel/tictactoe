@@ -29,7 +29,6 @@ CREATE TABLE `replays` (
   `win_a` tinyint(4) NOT NULL,
   `win_b` tinyint(4) NOT NULL,
   `data` longtext NOT NULL,
-  `dateInsert` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `joueur_a` (`player_a`),
   KEY `joueur_b` (`player_b`),
