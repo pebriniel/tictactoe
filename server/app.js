@@ -258,7 +258,7 @@ setInterval( function() {
                     games[_uniqid].setReplayValue(actionLoose);
                     socketPlayer1.emit('game action', JSON.stringify(actionLoose));
 
-                    games[_uniqid].setReplayValue(actionLoose);
+                    games[_uniqid].setReplayValue(actionWin);
                     socketPlayer2.emit('game action', JSON.stringify(actionWin));
 
                 }
