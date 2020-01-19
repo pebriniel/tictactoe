@@ -1,7 +1,7 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<section id="searchBlock">
+<section>
     <header class="row">
         <div class="medium-12 columns">
             <h2 class="text-center ">Replay de votre partie</h2>
@@ -16,7 +16,6 @@
             <div id="boardsMessage" class="medium-6 columns">
                 <div id="containerMessage">
                     <ul id="messages">
-                        <li>tests</li>
                     </ul>
                 </div>
             </div>
@@ -38,8 +37,15 @@
 
         content.forEach(item => {
 
-            if(item.action == 'ChangeCaseValue') {
+            console.log(item);
+
+            if(item.action == 'ChangeCaseValue')
+            {
                 Game.getBoard().setCasePlayer(null, item);
+            }
+            else if(item.action == 'pushMessage' || item.action == 'leaveGame')
+            {
+                pushMessage(item);
             }
 
         });
