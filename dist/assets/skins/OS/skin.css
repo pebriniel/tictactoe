@@ -20,15 +20,8 @@
     background-size: 50% 50%;
 
 }
-#boards .line
-{
-    display: block;
-}
 #boards .case
 {
-    text-align: center;
-    font-size: 1.5rem;
-
     color: white;
     background-color: rgba(0, 0, 0, 0.2);
 }

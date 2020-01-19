@@ -9,12 +9,11 @@ const Board = class {
     generateBoard() {
         const level = Game.getLevel();
 
-        let widthCase = this._board.offsetWidth/Game.getFormat(level);
-
         for(let line = 0; line < Game.getFormat(level); line ++){
             let dline = document.createElement("div");
 
             dline.classList.add('line');
+            dline.classList.add('line-'+level);
 
             for(let column = 0; column < Game.getFormat(level); column ++){
                 let dcase = document.createElement("div");
@@ -24,7 +23,6 @@ const Board = class {
                 dcase.dataset.line = line;
                 dcase.dataset.column = column;
 
-                dcase.style = 'width:calc('+widthCase+'px - 1.1rem); height:calc('+widthCase+'px - 1.1rem); margin: 0.2rem';
                 dcase.addEventListener('click', Interactive.ClickOnCase);
 
                 dline.appendChild(dcase);

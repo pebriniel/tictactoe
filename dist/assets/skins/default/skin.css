@@ -1,22 +1,31 @@
 #boards
 {
-  background: red;
+    background-color: red;
 }
 #boards .case-0::before
 {
-    content: 'X';
+    content: '';
+
+    background: url('icons/cross.svg') center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+
 }
 #boards .case-1::before
 {
-    content: 'O';
+    content: '';
+
+    background: url('icons/circle.svg') center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+
 }
-#boards .line
-{
-    display: block;
-}
+
 #boards .case
 {
-    font-size: 1.5rem;
     color: white;
-    background: #226499;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+#boards .case:hover{
+    border: 2px solid red;
 }

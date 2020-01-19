@@ -16,35 +16,65 @@
 
     .case-0::before {
         content: 'X';
-
-        display: flex;
-        height: 100%;
-
-        align-items: center;
-
-        justify-content: center;
+        // align-items: center;
+        //
+        // justify-content: center;
     }
     .case-1::before {
         content: 'O';
 
-        display: flex;
-        height: 100%;
-
-        align-items: center;
-
-        justify-content: center;
+        // align-items: center;
+        //
+        // justify-content: center;
     }
     .line{
-        display: block;
-    }
-    .case {
-        display: inline-block;
-        vertical-align: top;
+        display: flex;
+        flex-wrap: wrap;
 
-        font-size: 1.5rem;
+        .case{
+            background-color: rgba(0, 0, 0, 0.2);
+        }
 
-        color: white;
-        background: $colorCarrer;
+        &-0{
+            .case {
+                  width: 31.3%;
+                  margin: 0.2rem;
+
+                &:before{
+                    content: '';
+                    float: left;
+                    padding: 50%;
+                }
+            }
+        }
+
+        &-1{
+            .case {
+
+                  width: 17.9%;
+                  margin: 0.2rem;
+
+                &:before{
+                    content: '';
+                    float: left;
+                    padding: 50%;
+                }
+            }
+        }
+
+        &-2{
+            .case {
+
+                  width: 12.2%;
+                  margin: 0.2rem;
+
+                &:before{
+                    content: '';
+                    float: left;
+                    padding: 50%;
+                }
+            }
+        }
     }
 }
 
