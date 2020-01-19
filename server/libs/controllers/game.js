@@ -68,7 +68,7 @@ class gameController extends Controller{
 
             const replay = new Replay();
 
-            this.view.replay = await replay.getReplay({'idreplay': idReplay});
+            this.view.replay = await replay.getReplay({'idreplay': idReplay, 'player': this.view.user.id});
 
             if(this.view.replay == undefined)
             {
