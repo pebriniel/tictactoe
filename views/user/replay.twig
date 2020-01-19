@@ -1,0 +1,30 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<section id="searchBlock">
+    <header class="row">
+        <div class="medium-12 columns">
+            <h2 class="text-center ">Historiques de vos parties</h2>
+        </div>
+    </header>
+    <main>
+        <section class="row">
+            <table class="table">
+
+            {% for replay in replays %}
+            <tr>
+                <td>
+                    <a href="/game/replay/{{ replay.id }}">regarder</a>
+                </td>
+                <td>{{ replay.username_a }}</td>
+                <td>{{ replay.win_a }}</td>
+                <td>{{ replay.win_b }}</td>
+                <td>{{ replay.username_b }}</td>
+            </tr>
+            {% endfor %}
+
+            </table>
+        </section>
+    </main>
+</section>
+{% endblock %}

@@ -25,8 +25,8 @@ const Game = class {
 
         this._replayModel = new Replay();
 
-        this._replayModel.setJoueurA(this._joueurs[0].getId());
-        this._replayModel.setJoueurB(this._joueurs[1].getId());
+        this._replayModel.setPlayerA(this._joueurs[0].getId());
+        this._replayModel.setPlayerB(this._joueurs[1].getId());
 
         this._interactive = new Interactive(this);
     }

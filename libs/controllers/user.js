@@ -1,6 +1,8 @@
 const Controller = require('../controller.js');
 const uniqid = require('uniqid');
 
+const Replay = require('../services/Replay.js');
+
 class UserController extends Controller{
 
     async login(req, res) {
@@ -51,7 +53,7 @@ class UserController extends Controller{
 
                     this.view.error = err;
                     return this._res.render('user/login.twig', this.view);
-                    
+
                 }
             }
 
@@ -65,6 +67,35 @@ class UserController extends Controller{
         res.cookie("userSession", '');
 
         return res.redirect('/');
+    }
+
+    async replay(req, res)
+    {
+
+        this._req = req;
+        this._res = res;
+
+        this.init();
+
+        //On récupère la session utilisateur s'il est déjà connecté
+        try{
+            let status = await this.isConnected()
+
+            // Si l'utilsateur n'est pas connecté on le redirige
+            if(!status) {
+                return this._res.redirect('/')
+            }
+
+            const replay = new Replay();
+
+            this.view.replays = await replay.getListReplays({'player': 1});
+
+            return this._res.render('user/replay.twig', this.view);
+
+        }
+        catch{
+
+        }
     }
 }
 
