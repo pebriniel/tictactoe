@@ -9,21 +9,26 @@
     </header>
     <main>
         <section class="row">
-            <table class="table">
+            {% if replays is defined and replays %}
+                <table class="table">
 
-            {% for replay in replays %}
-            <tr>
-                <td>
-                    <a href="/game/replay/{{ replay.id }}">regarder</a>
-                </td>
-                <td>{{ replay.username_a }}</td>
-                <td>{{ replay.win_a }}</td>
-                <td>{{ replay.win_b }}</td>
-                <td>{{ replay.username_b }}</td>
-            </tr>
-            {% endfor %}
+                {% for replay in replays %}
+                <tr>
+                    <td>
+                        <a href="/game/replay/{{ replay.id }}">regarder</a>
+                    </td>
+                    <td>{{ replay.username_a }}</td>
+                    <td>{{ replay.win_a }}</td>
+                    <td>{{ replay.win_b }}</td>
+                    <td>{{ replay.username_b }}</td>
+                </tr>
+                {% endfor %}
 
-            </table>
+                </table>
+            {% else %}
+                Vous n'avez aucun replay pour le moment.<br/>
+                Les replays sont disponibles qu'avec le mode multijoueur.
+            {% endif %}
         </section>
     </main>
 </section>
