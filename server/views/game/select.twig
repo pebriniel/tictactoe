@@ -26,7 +26,11 @@
                 <h3>Pour un plaisir solitaire</h3>
             </p>
             <p class="launch">
-                <a href="/game/online">Jouer en multijoueur</a>
+                {% if user is defined and user %}
+                    <a href="/game/online">Jouer en multijoueur</a>
+                {% else %}
+                    <a>Vous devez être connecté.</a>
+                {% endif %}
             </p>
             <p>
                 <ul>
