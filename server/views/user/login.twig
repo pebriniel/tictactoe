@@ -11,7 +11,7 @@
 </section>
 <section id="loginBlock">
     <main class="row">
-        <div class="medium-6 columns">
+        <div class="small-12 medium-6 columns">
             <div>
             {% if input_empty is defined and input_empty %}
                 Remplissez tous les champs.
@@ -28,7 +28,7 @@
             {% endif %}
             </div>
             <div class="callout secondary">
-                <form action="#" method="POST" name="connexion">
+                <form action="/user/login" method="POST" name="connexion">
                     <div class="row">
                         <div class="small-12 columns">
                             <label>Pseudo
@@ -45,7 +45,7 @@
                 </form>
             </div>
         </div>
-        <div class="medium-6 columns">
+        <div class="small-12 medium-6 columns">
             <div>
             {% if input_empty is defined and input_empty %}
                 Remplissez tous les champs.
@@ -72,7 +72,7 @@
                         {% endif %}
                     </ul>
                 {% endif %}
-                <form action="/login/register" method="POST" name="register">
+                <form action="/user/register" method="POST" name="register">
                     <div class="row">
                         <div class="small-12 columns">
                             <label>Pseudo
