@@ -43,6 +43,8 @@ class UserController extends Controller{
                     bcrypt.hash(password, 10, function(err, hash) {
                         user.save([login, email, hash, 1]);
                     });
+
+                    this.view.register = true;
                 }
                 // Sinon, on enregistre en session les erreurs que l'on a rencontrés.
                 else{
