@@ -198,7 +198,7 @@ setInterval( function() {
             games[_uniqid].getInteractive().setActionMessage('valide', `Vous commencez !`);
             socketPlayer1.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
 
-            games[_uniqid].getInteractive().setActionMessage('valide', `Vous êtes le deuxième joueur ! `);
+            games[_uniqid].getInteractive().setActionMessage('valide', `Votre adversaire commence ! `);
             socketPlayer2.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
 
             //On attends les messages du joueur 1
