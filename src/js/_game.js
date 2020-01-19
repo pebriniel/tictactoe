@@ -16,6 +16,9 @@ var Game = {
         if(mode != null && mode != 'null' && mode != undefined){
             this.setLevel(mode);
         }
+        else{
+            this.setLevel(0);
+        }
 
         if(this._level != 0){
             this._max = 4;
@@ -24,9 +27,6 @@ var Game = {
         this.setBoard(new Board());
         this.getBoard().generateBoard();
 
-        if(this.getLevel() == undefined){
-            this.setLevel(0);
-        }
     },
 
     clear: function(relaunch = false, action = {}){

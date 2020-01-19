@@ -1,6 +1,9 @@
 
 
 var Interactive = {
+
+    playable: true,
+
     //Si le joueur recherche une partie
     searchGame: function(e){
         Online.sendActionSpecific('game search', true);
@@ -71,6 +74,10 @@ var Interactive = {
 
     //Si le joueur clique sur une case
     ClickOnCase: function(e){
+        if(!Interactive.playable){
+            return null;
+        }
+
         let variable = Interactive.ChangeCaseValue(this);
 
         if(Online.online && variable == true){

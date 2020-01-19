@@ -5626,7 +5626,10 @@ section a {
     #mode main div ul {
       text-align: left; }
     #mode main div .launch {
-      padding: 2rem; }
+      padding: 1rem; }
+      @media screen and (min-width: 64em) {
+        #mode main div .launch {
+          padding: 2rem; } }
       #mode main div .launch a {
         display: block; }
         #mode main div .launch a.active {
@@ -5638,13 +5641,16 @@ section a {
 
 #options a {
   display: inline-block;
-  margin: 0.5rem;
+  margin-top: 0.5rem;
   width: 100%; }
   @media screen and (min-width: 64em) {
     #options a {
-      width: 48%; } }
+      width: 48%;
+      margin: 0.5rem;
+      text-align: center; } }
   #options a.active {
-    background: #14967c; }
+    background: #14967c;
+    color: white; }
 
 .actionBlock {
   position: relative;

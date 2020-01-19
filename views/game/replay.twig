@@ -1,0 +1,48 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<section id="searchBlock">
+    <header class="row">
+        <div class="medium-12 columns">
+            <h2 class="text-center ">Replay de votre partie</h2>
+        </div>
+    </header>
+    <main>
+        <section id="boardBlock">
+            <div id="screen" class="medium-6 columns">
+                <div id="boards">
+                </div>
+            </div>
+            <div id="boardsMessage" class="medium-6 columns">
+                <div id="containerMessage">
+                    <ul id="messages">
+                        <li>tests</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+    </main>
+</section>
+{% endblock %}
+
+
+{% block javascript %}
+    <script>
+
+        Game.init(0);
+
+        Interactive.playable = false;
+
+        const content = {{ replay.data }};
+
+        content.forEach(item => {
+
+            if(item.action == 'ChangeCaseValue') {
+                Game.getBoard().setCasePlayer(null, item);
+            }
+
+        });
+
+    </script>
+{% endblock %}

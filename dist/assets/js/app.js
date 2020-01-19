@@ -213,6 +213,9 @@ var Game = {
         if(mode != null && mode != 'null' && mode != undefined){
             this.setLevel(mode);
         }
+        else{
+            this.setLevel(0);
+        }
 
         if(this._level != 0){
             this._max = 4;
@@ -221,9 +224,6 @@ var Game = {
         this.setBoard(new Board());
         this.getBoard().generateBoard();
 
-        if(this.getLevel() == undefined){
-            this.setLevel(0);
-        }
     },
 
     clear: function(relaunch = false, action = {}){
@@ -293,6 +293,9 @@ var Game = {
 
 
 var Interactive = {
+
+    playable: true,
+
     //Si le joueur recherche une partie
     searchGame: function(e){
         Online.sendActionSpecific('game search', true);
@@ -363,6 +366,10 @@ var Interactive = {
 
     //Si le joueur clique sur une case
     ClickOnCase: function(e){
+        if(!Interactive.playable){
+            return null;
+        }
+
         let variable = Interactive.ChangeCaseValue(this);
 
         if(Online.online && variable == true){
