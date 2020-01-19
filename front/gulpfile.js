@@ -9,7 +9,7 @@ var $ = require('gulp-load-plugins')({ lasy: true });
 
 // Variables de chemins
 var source = './src'; // dossier de travail
-var destination = './dist'; // dossier à livrer
+var destination = './../server/dist'; // dossier à livrer
 
 
 var sassPaths = [
