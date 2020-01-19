@@ -2,16 +2,19 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 
+const session = require('express-session');
+const uniqid = require('uniqid');
+
 const app = new express();
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const Twig = require("twig");
 
-const uniqid = require('uniqid');
-
 const port = process.env.PORT || 3000;
 
+
+const socketCookies = require('./libs/middleware/socketCookies.js');
 
 const indexRoute = require('./libs/controllers/index.js');
 const chatRoute = require('./libs/controllers/chat.js');
@@ -24,11 +27,16 @@ controller = new controller();
 
 const Game = require('./libs/game/game.js');
 
+const registerValidationRules = require('./libs/forms/validators/register.js')
+
 app.set("twig options", {
     allow_async: true, // Allow asynchronous compiling
     strict_variables: false
 });
 
+app.use(express.json());
+
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,6 +53,10 @@ app.get('/chat', function(req, res){
 
 app.all('/user/login', function(req, res){
     new userRoute(req, res).login();
+});
+
+app.post('/user/register', registerValidationRules(), function(req, res){
+    new userRoute(req, res).registerPost();
 });
 
 app.all('/user/logout', function(req, res){
@@ -81,19 +93,23 @@ app.get('/options', function(req, res){
 var allPlayers = [];
 var searchPlayers = [];
 var games = [];
+
+io.use(socketCookies);
+
 io.on('connection', function(socket){
     //On ajoute et initie le joueur
     allPlayers[socket.id];
 
     allPlayers[socket.id] = {};
     allPlayers[socket.id].username = 'boussad';
+    allPlayers[socket.id].cookie = socket.request.cookies['userSession'];
 
     socket.on('game search', async function(action){
         // Nous vérifions que l'utilisateur est bien connecté...
         try{
             console.log('start try ');
 
-            let utilisateur = await controller.user.isConnected('evs275rok5k5k4ku');
+            let utilisateur = await controller.user.isConnected(allPlayers[socket.id].cookie);
 
             // S'il est bien connecté, on lance la recherche de partie
             if(utilisateur){
