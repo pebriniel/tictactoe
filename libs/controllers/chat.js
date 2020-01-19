@@ -2,14 +2,14 @@ const Controller = require('../controller.js');
 
 class chatController extends Controller{
 
-    exec(req, res) {
+    constructor(req, res)
+    {
+        super()
+    }
 
-        this._req = req;
-        this._res = res;
+    exec() {
 
-        this.init();
-
-        return this._res.render('chat/index.twig', this.view)
+        return this.getRes().render('chat/index.twig', this.view)
     }
 }
 

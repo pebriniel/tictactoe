@@ -1,15 +1,17 @@
 const Controller = require('../controller.js');
 
-class IndexController extends Controller{
+class IndexController extends Controller
+{
 
-    exec(req, res) {
+    constructor(req, res)
+    {
+        super(req, res);
+    }
 
-        this._req = req;
-        this._res = res;
+    exec()
+    {
 
-        this.init();
-
-        return this._res.render('index/index.twig', this.view)
+        return this.getRes().render('index/index.twig', this.view)
     }
 }
 

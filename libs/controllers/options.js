@@ -2,14 +2,16 @@ const Controller = require('../controller.js');
 
 class optionsController extends Controller{
 
-    exec(req, res) {
+    constructor(req, res)
+    {
+        super(req, res);
+    }
 
-        this._req = req;
-        this._res = res;
+    exec()
+    {
 
-        this.init();
+        return this.getRes().render('options/index.twig', this.view);
 
-        return this._res.render('options/index.twig', this.view)
     }
 }
 

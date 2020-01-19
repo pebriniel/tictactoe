@@ -21,7 +21,6 @@ const userRoute = require('./libs/controllers/user.js');
 
 let controller = require('./libs/controller.js');
 controller = new controller();
-controller.init();
 
 const Game = require('./libs/game/game.js');
 
@@ -37,43 +36,43 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/static', express.static(__dirname + '/dist'));
 
 app.get('/', function(req, res){
-    new gameRoute().select(req, res);
+    new gameRoute(req, res).select();
 });
 
 app.get('/chat', function(req, res){
-    new chatRoute().exec(req, res);
+    new chatRoute(req, res).exec();
 });
 
 app.all('/user/login', function(req, res){
-    new userRoute().login(req, res);
+    new userRoute(req, res).login();
 });
 
 app.all('/user/logout', function(req, res){
-    new userRoute().logout(req, res);
+    new userRoute(req, res).logout();
 });
 
 app.all('/user/replay', function(req, res){
-    new userRoute().replay(req, res);
+    new userRoute(req, res).replay();
 });
 
 app.get('/game/replay/:id', function(req, res){
-    new gameRoute().replay(req, res);
+    new gameRoute(req, res).replay();
 });
 
 app.get('/game/select', function(req, res){
-    new gameRoute().select(req, res);
+    new gameRoute(req, res).select();
 });
 
 app.get('/game/online', function(req, res){
-    new gameRoute().execOnline(req, res);
+    new gameRoute(req, res).execOnline();
 });
 
 app.get('/game/:mode', function(req, res){
-    new gameRoute().exec(req, res);
+    new gameRoute(req, res).exec();
 });
 
 app.get('/options', function(req, res){
-    new optionsRoute().exec(req, res);
+    new optionsRoute(req, res).exec();
 });
 
 
