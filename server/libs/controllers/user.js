@@ -146,7 +146,7 @@ class UserController extends Controller{
 
             const replay = new Replay();
 
-            this.view.replays = await replay.getListReplays({'player': 1});
+            this.view.replays = await replay.getListReplays({'player': this.view.user.id});
 
             return this.render('user/replay.twig');
         }
