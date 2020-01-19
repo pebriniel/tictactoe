@@ -2,7 +2,7 @@ const Board = require('./board.js');
 const Player = require('./player.js');
 const Interactive = require('./interactive.js');
 
-const Replay = require('../services/Replay.js');
+const Replay = require('../models/Replay.js');
 
 const Game = class {
 

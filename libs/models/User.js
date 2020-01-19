@@ -149,6 +149,47 @@ class User {
         this._login = data.login;
         this._status = data.status;
     }
+
+    emailExists(email)
+    {
+
+        var mysqlConnexion = new LibMysql();
+
+        let mysql = LibMysql.mysql;
+        let pool = LibMysql.pool;
+
+        return mysqlConnexion.start()
+        //Chargement de l'utilisateur sélectionné
+        .then((connection) => {
+
+            let sql_template = "SELECT id FROM utilisateurs WHERE email = ?";
+
+            let replaces = [email];
+            let sql = mysqlConnexion.mysql.format(sql_template, replaces);
+
+            return mysqlConnexion.queryOne(connection, sql);
+        });
+    }
+
+    async save(datas = null)
+    {
+        var mysqlConnexion = new LibMysql();
+        if(datas != null)
+        {
+            try{
+                let connection = await mysqlConnexion.start();
+
+                let sql_template = "INSERT INTO `utilisateurs` (login, email, password, status) VALUES(?, ?, ?, ?) ";
+
+                let sql = mysqlConnexion.mysql.format(sql_template, datas);
+
+                return mysqlConnexion.insert(connection, sql);
+            }
+            catch{
+
+            }
+        }
+    }
 }
 exports.User = User;
 //# sourceMappingURL=User.js.map

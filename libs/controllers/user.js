@@ -1,7 +1,9 @@
-const Controller = require('../controller.js');
+const bcrypt = require("bcrypt");
 const uniqid = require('uniqid');
+const { check, validationResult } = require('express-validator');
 
-const Replay = require('../services/Replay.js');
+const Controller = require('../controller.js');
+const Replay = require('../models/Replay.js');
 
 class UserController extends Controller{
 
@@ -10,10 +12,65 @@ class UserController extends Controller{
         super(req, res);
     }
 
+    // L'action de la création de compte
+    async registerPost()
+    {
+        //On récupère les données du formulaire
+        const login = this.getReq().body.loginRegister;
+        const password = this.getReq().body.passwordRegister;
+        const email = this.getReq().body.emailRegister;
+
+        const errors = validationResult(this.getReq());
+
+        if (!errors.isEmpty())
+        {
+            console.log('il y a des erreurs');
+            const extractedErrors = []
+            errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
+            this.getReq().session.errors = errors;
+        }
+        else
+        {
+            try{
+                let checkLogin = await this.user.checkUsername(login);
+                let checkEmail = await this.user.emailExists(email);
+
+                // Si les données n'existe pas.
+                if(checkLogin == undefined && checkEmail == undefined)
+                {
+                    //On enregistre le compte utilsateur
+                    const user = this.user;
+                    bcrypt.hash(password, 10, function(err, hash) {
+                        user.save([login, email, hash, 1]);
+                    });
+                }
+                // Sinon, on enregistre en session les erreurs que l'on a rencontrés.
+                else{
+                    this.getReq().session.errors = {
+                        'loginRegister': (checkLogin != undefined) ? true : false,
+                        'emailRegister': (checkEmail != undefined) ? true : false
+                    };
+                }
+
+            }
+            finally{
+
+            }
+        }
+
+        return this.redirectTo('/user/login');
+
+    }
+
+
+    // L'action de connexion
     async login()
     {
-        var username = (this.getReq().body.username) ? this.getReq().body.username : '';
-        var password = (this.getReq().body.password) ? this.getReq().body.password : '';
+
+        const login = (this.getReq().body.login) ? this.getReq().body.login : '';
+        const password = (this.getReq().body.password) ? this.getReq().body.password : '';
+
+        this.view.errors = this.getReq().session.errors;
 
         try{
 
@@ -23,16 +80,15 @@ class UserController extends Controller{
             if(this.view.user){
                 return this.redirectTo('/')
             }
-            else if(username == '' || password == ''){
-                this.view.connected = false;
-                this.view.input_empty = true;
-
+            else if(login == '' || password == ''){
                 return this.render('user/login.twig');
             }
             else{
                 try {
 
-                    let data = await this.user.checkLogin(username, password);
+                    let data = await this.user.checkLogin(login, password);
+
+                    console.log(data);
 
                     if(data > 0){
 
@@ -50,6 +106,7 @@ class UserController extends Controller{
                 }
                 catch(err){
 
+                    console.log(err);
                     this.view.error = err;
 
                 }
@@ -63,6 +120,8 @@ class UserController extends Controller{
         }
     }
 
+
+    // L'action de déconnexion
     logout()
     {
         this.getRes().cookie("userSession", '');
@@ -70,6 +129,7 @@ class UserController extends Controller{
         return this.redirectTo('/');
     }
 
+    // La liste des replays
     async replay()
     {
 

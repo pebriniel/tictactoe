@@ -1,4 +1,4 @@
-const libUser = require('./services/User');
+const libUser = require('./models/User');
 
 class Controller{
 

@@ -1,6 +1,6 @@
 const Controller = require('../controller.js');
 
-const Replay = require('../services/Replay.js');
+const Replay = require('../models/Replay.js');
 
 class gameController extends Controller{
 

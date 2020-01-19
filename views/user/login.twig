@@ -1,26 +1,99 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-    {% if connected is defined and connected %}
-        vous êtes connecté
-    {% else %}
-        {% if input_empty is defined and input_empty %}
-            Remplissez tous les champs.
-        {% endif %}
-
-        {% if error is defined %}
-            {% if error == -1 %}
-                le compte utilisateur n'existe pas
+<section id="searchBlock">
+    <header class="row">
+        <div class="medium-12 columns">
+            <h2 class="text-center ">Connexion</h2>
+        </div>
+    </header>
+    <main>
+</section>
+<section id="loginBlock">
+    <main class="row">
+        <div class="medium-6 columns">
+            <div>
+            {% if input_empty is defined and input_empty %}
+                Remplissez tous les champs.
             {% endif %}
 
-            {% if error == -2 %}
-                le mot de passe est mauvais
+            {% if error is defined %}
+                {% if error == -1 %}
+                    le compte utilisateur n'existe pas
+                {% endif %}
+
+                {% if error == -2 %}
+                    le mot de passe est mauvais
+                {% endif %}
             {% endif %}
-        {% endif %}
-        <form method="post">
-            <input type="text" name="username" />
-            <input type="password" name="password" />
-            <input type="submit" />
-        </form>
-    {% endif %}
+            </div>
+            <div class="callout secondary">
+                <form action="#" method="POST" name="connexion">
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <label>Pseudo
+                                <input type="text" name="login">
+                            </label>
+                        </div>
+                        <div class="small-12 columns">
+                            <label>Mot-de-passe
+                                <input type="password" name="password">
+                            </label>
+                            <button type="submit" class="button">Connexion</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="medium-6 columns">
+            <div>
+            {% if input_empty is defined and input_empty %}
+                Remplissez tous les champs.
+            {% endif %}
+
+            {% if error is defined %}
+                {% if error == -1 %}
+                    le compte utilisateur n'existe pas
+                {% endif %}
+
+                {% if error == -2 %}
+                    le mot de passe est mauvais
+                {% endif %}
+            {% endif %}
+            </div>
+            <div class="callout secondary">
+                {% if errors is defined %}
+                    <ul>
+                        {% if errors.loginRegister is defined and errors.loginRegister %}
+                            <li>Le pseudo existe déjà.</li>
+                        {% endif %}
+                        {% if errors.emailRegister is defined and errors.emailRegister %}
+                            <li>L'e-mail existe déjà.</li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                <form action="/login/register" method="POST" name="register">
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <label>Pseudo
+                                <input type="text" name="loginRegister">
+                            </label>
+                        </div>
+                        <div class="small-12 columns">
+                            <label>Mot-de-passe
+                                <input type="password" name="passwordRegister">
+                            </label>
+                        </div>
+                        <div class="small-12 columns">
+                            <label>E-mail
+                                <input type="text" name="emailRegister">
+                            </label>
+                            <button type="submit" class="button">Inscription</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</section>
 {% endblock %}
