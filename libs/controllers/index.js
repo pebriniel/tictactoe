@@ -8,10 +8,15 @@ class IndexController extends Controller
         super(req, res);
     }
 
-    exec()
+    async exec()
     {
+        try{
+            this.view.user = await this.getUser();
+        }
+        catch{
+            return this.render('index/index.twig');
+        }
 
-        return this.getRes().render('index/index.twig', this.view)
     }
 }
 

@@ -7,11 +7,14 @@ class optionsController extends Controller{
         super(req, res);
     }
 
-    exec()
+    async exec()
     {
-
-        return this.getRes().render('options/index.twig', this.view);
-
+        try{
+            this.view.user = await this.getUser();
+            return this.render('options/index.twig');
+        }
+        catch{
+        }
     }
 }
 

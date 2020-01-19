@@ -7,9 +7,15 @@ class chatController extends Controller{
         super()
     }
 
-    exec() {
-
-        return this.getRes().render('chat/index.twig', this.view)
+    async exec()
+    {
+        try{
+            this.view.user = await this.getUser();
+            return this.render('chat/index.twig');
+        }
+        catch{
+            
+        }
     }
 }
 

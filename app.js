@@ -51,7 +51,7 @@ app.all('/user/logout', function(req, res){
     new userRoute(req, res).logout();
 });
 
-app.all('/user/replay', function(req, res){
+app.all('/user/replays', function(req, res){
     new userRoute(req, res).replay();
 });
 

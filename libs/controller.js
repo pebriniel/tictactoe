@@ -7,30 +7,18 @@ class Controller{
         this._req = req;
         this._res = res;
 
+        this._redirect = false;
+
         this.user = new libUser.User();
         this.view = new Object();
 
-        let _this = this;
-        this.view.user = (async () => {
-
-            return await _this.isConnected();
-
-        });
-
     }
 
-    failureCallback(erreur)
+    getUser()
     {
-      console.error("L'opération a échoué avec le message : " + erreur);
-    }
+        let cookie = (this.getReq().cookies != undefined && this.getReq().cookies['userSession']) ? this.getReq().cookies['userSession'] : 'empty';
 
-    async isConnected()
-    {
-
-        const cookie = (this.getReq().cookies != undefined && this.getReq().cookies['userSession']) ? this.getReq().cookies['userSession'] : 'empty';
-
-        return await this.user.isConnected(cookie);
-
+        return this.user.isConnected(cookie);
     }
 
     getReq()
@@ -42,6 +30,30 @@ class Controller{
     {
         return this._res;
     }
+
+    setRedirect(redirect = false)
+    {
+        this._redirect = redirect;
+    }
+
+    getRedirect()
+    {
+        return this._redirect;
+    }
+
+    redirectTo(path)
+    {
+        this.setRedirect(true);
+        return this.getRes().redirect(path);
+    }
+
+    render(template)
+    {
+        if(!this.getRedirect()){
+            return this.getRes().render(template, this.view);
+        }
+    }
+
 }
 
 module.exports = Controller;

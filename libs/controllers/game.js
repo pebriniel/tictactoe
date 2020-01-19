@@ -9,55 +9,75 @@ class gameController extends Controller{
         super(req, res);
     }
 
-    select()
+    async select()
     {
-
-        return this.getRes().render('game/select.twig', this.view);
-
+        try{
+            this.view.user = await this.getUser();
+        }
+        finally{
+            return this.render('game/select.twig');
+        }
     }
 
-    exec()
+    async exec()
     {
+        try{
+            this.view.user = await this.getUser();
 
-        this.view.mode = 0;
-        if(this.getReq().params.mode <= 2){
-            this.view.mode = this.getReq().params.mode;
+            this.view.mode = 0;
+            if(this.getReq().params.mode <= 2){
+                this.view.mode = this.getReq().params.mode;
+            }
+        }
+        finally{
+            return this.render('game/local.twig');
         }
 
-        return this.getRes().render('game/local.twig', this.view);
-
     }
 
-    execOnline()
+    async execOnline()
     {
+        try{
+            this.view.user = await this.getUser();
 
-        return this.getRes().render('game/online.twig', this.view);
-
+            if(!this.view.user){
+                console.log('disconnect');
+                return this.redirectTo('/');
+            }
+        }
+        finally{
+            return this.render('game/online.twig');
+        }
     }
 
     async replay()
     {
-        // Si l'utilsateur n'est pas connecté on le redirige
-        if(!this.view.user) {
-            return this.getRes().redirect('/')
+        try{
+            this.view.user = await this.getUser();
+
+            // Si l'utilsateur n'est pas connecté on le redirige
+            if(!this.view.user) {
+                return this.redirectTo('/')
+            }
+
+            if(this.getReq().params.id == undefined || this.getReq().params.id == null || isNaN(this.getReq().params.id)){
+                return this.redirectTo('/user/replay')
+            }
+
+            let idReplay = this.getReq().params.id;
+
+            const replay = new Replay();
+
+            this.view.replay = await replay.getReplay({'idreplay': idReplay});
+
+            if(this.view.replay == undefined)
+            {
+                return this.redirectTo('/user/replay')
+            }
         }
-
-        if(this.getReq().params.id == undefined || this.getReq().params.id == null || isNaN(this.getReq().params.id)){
-            return this.getRes().redirect('/user/replay')
+        finally{
+            return this.render('game/replay.twig');
         }
-
-        let idReplay = this.getReq().params.id;
-
-        const replay = new Replay();
-
-        this.view.replay = await replay.getReplay({'idreplay': idReplay});
-
-        if(this.view.replay == undefined)
-        {
-            return this.getRes().redirect('/user/replay')
-        }
-
-        return this.getRes().render('game/replay.twig', this.view);
     }
 }
 

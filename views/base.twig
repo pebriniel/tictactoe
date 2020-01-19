@@ -20,7 +20,12 @@
                 <ul class="menu">
                     <li><a href="/game/select">Jouer</a></li>
                     <li><a href="/options">Options</a></li>
-                    {#<li><a href="/login">Connexion</a></li> #}
+                    {% if user is defined and user %}
+                        <li><a href="/user/replays">Replays</a></li>
+                        <li><a href="/user/logout">Déconnexion</a></li>
+                    {% else %}
+                        <li><a href="/user/login">Connexion</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </header>

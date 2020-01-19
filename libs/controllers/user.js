@@ -12,68 +12,85 @@ class UserController extends Controller{
 
     async login()
     {
-
         var username = (this.getReq().body.username) ? this.getReq().body.username : '';
         var password = (this.getReq().body.password) ? this.getReq().body.password : '';
 
-        // S'il est déjà connecté, on le redirige sur l'accueil
-        if(this.view.user){
-            return this.getRes().redirect('/')
-        }
-        else if(username == '' || password == ''){
-            this.view.connected = false;
-            this.view.input_empty = true;
+        try{
 
-            return this.getRes().render('user/login.twig', this.view);
-        }
-        else{
-            try {
+            this.view.user = await this.getUser();
 
-                let data = await this.user.checkLogin(username, password);
+            // S'il est déjà connecté, on le redirige sur l'accueil
+            if(this.view.user){
+                return this.redirectTo('/')
+            }
+            else if(username == '' || password == ''){
+                this.view.connected = false;
+                this.view.input_empty = true;
 
-                if(data > 0){
+                return this.render('user/login.twig');
+            }
+            else{
+                try {
 
-                    this.user.loadModel();
-                    let _uniqid = uniqid();
+                    let data = await this.user.checkLogin(username, password);
 
-                    this.user.setCookie(_uniqid);
-                    this.getRes().cookie("userSession", _uniqid);
+                    if(data > 0){
 
-                    this.view.connected = data;
+                        this.user.loadModel();
+                        let _uniqid = uniqid();
 
-                    return this.getRes().redirect('/');
+                        this.user.setCookie(_uniqid);
+                        this.getRes().cookie("userSession", _uniqid);
+
+                        this.view.connected = data;
+
+                        return this.redirectTo('/');
+                    }
+
                 }
+                catch(err){
 
-                return this.getRes().render('user/login.twig', this.view);
+                    this.view.error = err;
+
+                }
+                finally{
+                    return this.render('user/login.twig');
+                }
             }
-            catch(err){
+        }
+        catch{
 
-                this.view.error = err;
-                return this.getRes().render('user/login.twig', this.view);
-
-            }
         }
     }
 
-    logout() {
-        res.cookie("userSession", '');
+    logout()
+    {
+        this.getRes().cookie("userSession", '');
 
-        return res.redirect('/');
+        return this.redirectTo('/');
     }
 
     async replay()
     {
 
-        // Si l'utilsateur n'est pas connecté on le redirige
-        if(this.view.user){
-            return this.getRes().redirect('/')
+        try{
+
+            this.view.user = await this.getUser();
+
+            // Si l'utilsateur n'est pas connecté on le redirige
+            if(!this.view.user){
+                return this.redirectTo('/')
+            }
+
+            const replay = new Replay();
+
+            this.view.replays = await replay.getListReplays({'player': 1});
+
+            return this.render('user/replay.twig');
         }
+        finally{
 
-        const replay = new Replay();
-
-        this.view.replays = await replay.getListReplays({'player': 1});
-
-        return this.getRes().render('user/replay.twig', this.view);
+        }
 
     }
 }
