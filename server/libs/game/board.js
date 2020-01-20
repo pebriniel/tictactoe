@@ -4,6 +4,7 @@ const Board = class {
 
     constructor() {
         this._board = [];
+        this._countAction = 0;
     }
 
     generateBoard(level, format) {
@@ -125,7 +126,22 @@ const Board = class {
             victoire = await this.checkWinElementDiagonal(true);
         }
 
+        // égalité !
+        if(this.getAction() == (this._board.length * this._board.length)){
+            victoire = 2;
+        }
+
         return victoire;
+    }
+
+    addAction()
+    {
+        this._countAction ++;
+    }
+
+    getAction()
+    {
+        return this._countAction;
     }
 }
 

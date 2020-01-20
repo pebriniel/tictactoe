@@ -227,6 +227,7 @@ setInterval( function() {
                 // S'il n'y a pas d'erreur on envoie les informations aux joueurs
                 if(action.type != 'erreur'){
                     games[_uniqid].setReplayValue(action);
+                    games[_uniqid].getBoard().addAction();
 
                     socketPlayer1.emit('game action', JSON.stringify(action));
                     socketPlayer2.emit('game action', JSON.stringify(action));
@@ -239,6 +240,7 @@ setInterval( function() {
 
                 let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
                 let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
+                let actionDraw = {action: 'leaveGame', draw: true, type: 'valide', message: `Il n'y a plus d'action possible, vous êtes à égalité ! Rententez votre chance !`};
 
                 if(victoire == 0) {
 
@@ -260,6 +262,15 @@ setInterval( function() {
 
                     games[_uniqid].setReplayValue(actionWin);
                     socketPlayer2.emit('game action', JSON.stringify(actionWin));
+
+                }
+                // il y a une égalité !
+                else if(victoire == 2) {
+
+                    games[_uniqid].setReplayValue(actionDraw);
+
+                    socketPlayer1.emit('game action', JSON.stringify(actionDraw));
+                    socketPlayer2.emit('game action', JSON.stringify(actionDraw));
 
                 }
 

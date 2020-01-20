@@ -74,6 +74,11 @@ const Game = class {
         return 0;
     }
 
+    getFormats()
+    {
+        return this._format;
+    }
+
     setReplayValue(data)
     {
         this._replay.push(data);
@@ -82,11 +87,6 @@ const Game = class {
     getReplayValue(data)
     {
         return this._replay;
-    }
-
-    getFormats()
-    {
-        return this._format;
     }
 
     getReplayModel()
