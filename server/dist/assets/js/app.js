@@ -197,9 +197,12 @@ var Game = {
         2: 7 // 7x7
     },
 
-    init: function(mode = null)
+    init: function(mode = null, resetPlayer = true)
     {
-        this._joueurs = [];
+        if(resetPlayer){
+            this._joueurs = [];
+        }
+
         this._currentPlayer = 0;
         this._max = 3;
 
@@ -223,10 +226,14 @@ var Game = {
         Interactive.cleanBoard(action);
 
         if(relaunch){
-            this.init();
-            Game.addPlayer('boussad');
-            Game.addPlayer('gabriel');
+            this.init(null, false);
+            // Game.addPlayer('boussad');
+            // Game.addPlayer('gabriel');
         }
+    },
+
+    getPlayer: function(id){
+        return this._joueurs[id];
     },
 
     getPlayers: function(){
@@ -305,6 +312,23 @@ var Interactive = {
         searchgameleaveBlock.classList.add('hidden');
     },
 
+    //On mets à jours les scores des deux joueurs
+    updateScore: function(idJoueur)
+    {
+        document.querySelector(`.score-${idJoueur}`).innerHTML = Game.getPlayer(idJoueur).getScore();
+    },
+
+    clearScore: function()
+    {
+        document.querySelectorAll(`.score span`).forEach( item => {
+            item.innerHTML = 0;
+        });
+
+        Game.getPlayers().forEach(item => {
+            item.resetScore();
+        });
+    },
+
     //On affiche l'écran de victoire
     screenEndGame: function(action = {}){
 
@@ -315,6 +339,17 @@ var Interactive = {
             winSplash.classList.add('hidden');
             if(action.win != undefined && action.win){
                 winSplash.classList.remove('hidden');
+            }
+        }
+
+        if(typeof winSplashPlayer !== 'undefined'){
+            winSplashPlayer.classList.add('hidden');
+            if(action.player != undefined){
+                winSplashPlayer.classList.remove('hidden');
+
+                document.querySelectorAll('.winPlayer').forEach(item => { item.classList.add('hidden') });
+
+                document.querySelector(`.player-${action.player}`).classList.remove('hidden');
             }
         }
 
@@ -377,9 +412,13 @@ var Interactive = {
             Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
-                Interactive.screenEndGame({win: 1});
+
+                Game.getPlayer(currentPlayer).addScore();
+
+                Interactive.updateScore(currentPlayer);
+                Interactive.screenEndGame({win: 1, player: currentPlayer});
             }
-            if(Game.getBoard().checkDraw()){
+            else if(Game.getBoard().checkDraw()){
                 Interactive.screenEndGame({draw: 1});
             }
         }
@@ -433,6 +472,10 @@ var Interactive = {
     loadButtonReset: function(action = {}) {
         if(Online.online == false){
             Game.clear(true, action);
+
+            if(action.clearScore != undefined){
+                Interactive.clearScore();
+            }
         }
     },
 
@@ -536,11 +579,16 @@ const Player = class {
         return this._score;
     }
 
-    addScore(val = 1){
+    addScore(val = +1){
         this.setScore(val);
     }
+
     removeScore(val = -1){
         this.setScore(val);
+    }
+
+    resetScore(val) {
+        this._score = 0;
     }
 
     setScore(val) {

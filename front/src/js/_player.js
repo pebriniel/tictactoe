@@ -26,11 +26,16 @@ const Player = class {
         return this._score;
     }
 
-    addScore(val = 1){
+    addScore(val = +1){
         this.setScore(val);
     }
+
     removeScore(val = -1){
         this.setScore(val);
+    }
+
+    resetScore(val) {
+        this._score = 0;
     }
 
     setScore(val) {

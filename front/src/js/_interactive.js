@@ -20,6 +20,23 @@ var Interactive = {
         searchgameleaveBlock.classList.add('hidden');
     },
 
+    //On mets à jours les scores des deux joueurs
+    updateScore: function(idJoueur)
+    {
+        document.querySelector(`.score-${idJoueur}`).innerHTML = Game.getPlayer(idJoueur).getScore();
+    },
+
+    clearScore: function()
+    {
+        document.querySelectorAll(`.score span`).forEach( item => {
+            item.innerHTML = 0;
+        });
+
+        Game.getPlayers().forEach(item => {
+            item.resetScore();
+        });
+    },
+
     //On affiche l'écran de victoire
     screenEndGame: function(action = {}){
 
@@ -30,6 +47,17 @@ var Interactive = {
             winSplash.classList.add('hidden');
             if(action.win != undefined && action.win){
                 winSplash.classList.remove('hidden');
+            }
+        }
+
+        if(typeof winSplashPlayer !== 'undefined'){
+            winSplashPlayer.classList.add('hidden');
+            if(action.player != undefined){
+                winSplashPlayer.classList.remove('hidden');
+
+                document.querySelectorAll('.winPlayer').forEach(item => { item.classList.add('hidden') });
+
+                document.querySelector(`.player-${action.player}`).classList.remove('hidden');
             }
         }
 
@@ -92,9 +120,13 @@ var Interactive = {
             Game.getBoard().setCasePlayer(this, {player: currentPlayer});
 
             if(Game.getBoard().checkWin()){
-                Interactive.screenEndGame({win: 1});
+
+                Game.getPlayer(currentPlayer).addScore();
+
+                Interactive.updateScore(currentPlayer);
+                Interactive.screenEndGame({win: 1, player: currentPlayer});
             }
-            if(Game.getBoard().checkDraw()){
+            else if(Game.getBoard().checkDraw()){
                 Interactive.screenEndGame({draw: 1});
             }
         }
@@ -148,6 +180,10 @@ var Interactive = {
     loadButtonReset: function(action = {}) {
         if(Online.online == false){
             Game.clear(true, action);
+
+            if(action.clearScore != undefined){
+                Interactive.clearScore();
+            }
         }
     },
 

@@ -7,9 +7,12 @@ var Game = {
         2: 7 // 7x7
     },
 
-    init: function(mode = null)
+    init: function(mode = null, resetPlayer = true)
     {
-        this._joueurs = [];
+        if(resetPlayer){
+            this._joueurs = [];
+        }
+
         this._currentPlayer = 0;
         this._max = 3;
 
@@ -33,10 +36,14 @@ var Game = {
         Interactive.cleanBoard(action);
 
         if(relaunch){
-            this.init();
-            Game.addPlayer('boussad');
-            Game.addPlayer('gabriel');
+            this.init(null, false);
+            // Game.addPlayer('boussad');
+            // Game.addPlayer('gabriel');
         }
+    },
+
+    getPlayer: function(id){
+        return this._joueurs[id];
     },
 
     getPlayers: function(){

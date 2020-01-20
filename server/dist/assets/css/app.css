@@ -5669,6 +5669,14 @@ section a {
   margin-top: 1rem; }
   .actionBlock a {
     display: block; }
+    .actionBlock a.inline {
+      display: inline-block; }
+  .actionBlock .score {
+    display: inline-block;
+    padding: 1rem;
+    text-transform: uppercase;
+    background: black;
+    color: white; }
 
 #containerMessage {
   position: relative;

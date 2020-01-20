@@ -157,5 +157,18 @@
 
     a{
         display: block;
+
+        &.inline
+        {
+            display: inline-block;
+        }
+    }
+
+    .score{
+        display: inline-block;
+        padding: 1rem;
+        text-transform: uppercase;
+        background: black;
+        color: white;
     }
 }
