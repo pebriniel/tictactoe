@@ -28,31 +28,36 @@ const Board = class {
         this._board[line][column] = value;
     }
 
-    async checkWinElementDiagonal(inverse = false){
+    async checkWinElementDiagonal(reverse = false){
         let currentPlayer = null;
         let victoire = 0;
         let column, returnPlayer;
+        let maxSize = this._board.length;
 
-        for(let line = 0; line < this._board.length; line ++){
+        for(let c = 0; c < 2 * (maxSize - 1) ; c ++){
 
-            column = line;
-            if(inverse){
-                column = (this._board.length - 1) - line;
-            }
+            for(let line = (maxSize - 1); line >= 0; line --){
 
-            returnPlayer = this._board[line][column];
+                column = c - line;
+                if(reverse)
+                {
+                    column = c - (maxSize - line);
+                }
 
-            if(returnPlayer != currentPlayer){
-                victoire = 1;
-                currentPlayer = returnPlayer;
-            }
-            else{
-                victoire ++;
-            }
+                returnPlayer = this._board[line][column];
 
-            if(victoire == 3){
+                if(returnPlayer != currentPlayer){
+                    victoire = 1;
+                    currentPlayer = returnPlayer;
+                }
+                else if(column >= 0 && column < maxSize){
+                    victoire ++;
+                }
 
-                return returnPlayer;
+                if(victoire == 3){
+
+                    return returnPlayer;
+                }
             }
         }
     }
