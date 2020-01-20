@@ -5603,7 +5603,8 @@ section a {
     display: flex;
     flex-wrap: wrap; }
     #boards .line .case {
-      background-color: rgba(0, 0, 0, 0.2); }
+      background-color: rgba(0, 0, 0, 0.2);
+      cursor: crosshair; }
     #boards .line-0 .case {
       width: 31.3%;
       margin: 0.2rem; }
