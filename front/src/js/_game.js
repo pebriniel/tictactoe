@@ -16,7 +16,7 @@ var Game = {
         if(mode != null && mode != 'null' && mode != undefined){
             this.setLevel(mode);
         }
-        else{
+        else if(this.getLevel() == undefined){
             this.setLevel(0);
         }
 

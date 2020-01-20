@@ -59,7 +59,7 @@ const Board = class {
 
                 returnPlayer = this.checkWinElement(`[data-line~="${line}"][data-column~="${column}"]`, true);
 
-                if(returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
+                if(line == 0 || returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
                     victoire = 1;
                     currentPlayer = returnPlayer;
                 }
@@ -69,11 +69,6 @@ const Board = class {
 
                 if(victoire == Game._max){
                     return returnPlayer;
-                }
-
-                if(line == 0){
-                    victoire = 1;
-                    currentPlayer = returnPlayer;
                 }
 
             }
@@ -110,7 +105,7 @@ const Board = class {
             //Si il y a le bon nombre de case cocher par ligne/column et que l'on ne fait pas une vérification diagonal
             if(elements.length == Game._max || (elements.length && _returnElement)){
 
-                //Si la condition de victoire dépasse le nombre de case
+                //Si la condition de victoire dépasse le nombre de case (format 5x5 & +)
                 if(Game._max > 3 && !(elements.length && _returnElement)){
 
                     let victoire = 1;
