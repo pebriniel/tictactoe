@@ -42,42 +42,38 @@ const Board = class {
     }
 
 
-    checkWinElementDiagonal(inverse = false){
+    checkWinElementDiagonal(reverse = false){
         let currentPlayer = null;
         let victoire = 0;
         let column, returnPlayer;
 
-        for(let c = 0; c < Game.getFormat(Game.getLevel()); c ++){
+        //On quadrille l'ensemble du tableau X * X
+        for(let c = 0; c < 2 * (Game.getFormat(Game.getLevel()) - 1) ; c ++){
 
-            for(let line = 0; line < Game.getFormat(Game.getLevel()); line ++){
+            for(let line = (Game.getFormat(Game.getLevel()) - 1); line >= 0; line --){
 
-                column = c + line;
-                if(inverse){
-                    column = (Game.getFormat(Game.getLevel()) - c) - line;
-                    column = Math.abs(column);
+                column = c - line;
+                if(reverse)
+                {
+                    column = c - (Game.getFormat(Game.getLevel()) - line);
                 }
+
 
                 returnPlayer = this.checkWinElement(`[data-line~="${line}"][data-column~="${column}"]`, true);
 
-                if(line == 0 || returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
+                if(returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
                     victoire = 1;
                     currentPlayer = returnPlayer;
                 }
-                else{
+                else if(column >= 0 && column < Game.getFormat(Game.getLevel())){
                     victoire ++;
                 }
 
                 if(victoire == Game._max){
                     return returnPlayer;
                 }
-
             }
 
-            if(c == (Game.getFormat(Game.getLevel() -1)) || c == 0)
-            {
-                victoire = 1;
-                currentPlayer = returnPlayer;
-            }
         }
     }
 
