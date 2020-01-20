@@ -107,8 +107,8 @@ io.on('connection', function(socket){
     socket.on('game search', async function(action){
         // Nous vérifions que l'utilisateur est bien connecté...
         try{
-            console.log('start try ');
 
+            console.log(allPlayers[socket.id].cookie);
             let utilisateur = await controller.user.isConnected(allPlayers[socket.id].cookie);
 
             // S'il est bien connecté, on lance la recherche de partie
@@ -140,7 +140,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('game leavesearch', function(action){
-        delete allPlayers[socket.id];
+        // delete allPlayers[socket.id];
 
         searchPlayers = searchPlayers.filter(function (el) {
           return el.socket != socket.id;
@@ -323,11 +323,16 @@ setInterval( function() {
             socketPlayer1.on('game leave', function(action){
 
                 action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
-                games[_uniqid].setReplayValue(action);
+
+                if(games[_uniqid] != undefined){
+                    games[_uniqid].setReplayValue(action);
+                }
 
                 socketPlayer2.emit('game action', JSON.stringify(action));
 
-                games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
+                if(games[_uniqid] != undefined){
+                    games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
+                }
 
                 delete games[_uniqid];
                 delete socketPlayer1;
@@ -339,11 +344,16 @@ setInterval( function() {
             socketPlayer2.on('game leave', function(action){
 
                 action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
-                games[_uniqid].setReplayValue(action);
+                if(games[_uniqid] != undefined){
+                    games[_uniqid].setReplayValue(action);
+                }
+
 
                 socketPlayer1.emit('game action', JSON.stringify(action));
 
-                games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
+                if(games[_uniqid] != undefined){
+                    games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
+                }
 
                 delete games[_uniqid];
                 delete socketPlayer1;
