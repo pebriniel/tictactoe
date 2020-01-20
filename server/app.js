@@ -108,7 +108,6 @@ io.on('connection', function(socket){
         // Nous vérifions que l'utilisateur est bien connecté...
         try{
 
-            console.log(allPlayers[socket.id].cookie);
             let utilisateur = await controller.user.isConnected(allPlayers[socket.id].cookie);
 
             // S'il est bien connecté, on lance la recherche de partie
