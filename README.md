@@ -2,7 +2,7 @@
 
 Tic Tac Toe est un jeu vidéo écrit en javascript et jouable en local et en multijoueur.
 
-C'est un projet créer pour ma pratique et mon éducation.
+C'est un projet créer pour ma pratique et mon apprentissage.
 
 Ce n'est pas parfait dans la structure et dans le code, mais ça fonctionne !
 
@@ -31,15 +31,15 @@ Tout d'abord, l'installation du serveur, déplacez-vous dans le dossier server/ 
 npm install
 ```
 
-Créez une nouvelles bases de données et importez y le fichier database.sql qui se trouve dans le dossier server/
+Créez une nouvelle base de donnée et importez-y le fichier database.sql qui se trouve dans le dossier server/
 
 Dernière étape, créer votre fichier d'environnement. Copier/coller le fichier .env.exemple et remplacer les placeholders par vos identifiants de connexion.
 
-Maintenant, vous pouvez démarrer le serveur et vous entrainez ! Si par hasard, vous utilisez ce projet pour lancer de l'e-sport autour de ce jeu, appelez moi, je veux voir ça ! ahah.
+Maintenant, vous pouvez démarrer le serveur et vous entrainez ! Si par hasard, vous utilisez ce projet pour lancer de l'e-sport autour de ce jeu, appelez-moi, je veux voir ça ! ahah.
 
 Il n'est pas nécessaire de compiler le front/ pour faire fonctionner le project, sauf si vous voulez y modifier le scss/js présent.
 
-Pour ça, déplacez-vous dans le dossier front/ et exéctuez les commandes suivants :
+Pour ça, déplacez-vous dans le dossier front/ et exécutez les commandes suivants :
 
 ```bash
 npm install
