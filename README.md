@@ -35,7 +35,7 @@ Créez une nouvelle base de donnée et importez-y le fichier database.sql qui se
 
 Dernière étape, créer votre fichier d'environnement. Copier/coller le fichier .env.exemple et remplacer les placeholders par vos identifiants de connexion.
 
-Maintenant, vous pouvez démarrer le serveur et vous entrainez ! Si par hasard, vous utilisez ce projet pour lancer de l'e-sport autour de ce jeu, appelez-moi, je veux voir ça ! ahah.
+Maintenant, vous pouvez démarrer le serveur et vous entrainez ! 
 
 Il n'est pas nécessaire de compiler le front/ pour faire fonctionner le project, sauf si vous voulez y modifier le scss/js présent.
 
