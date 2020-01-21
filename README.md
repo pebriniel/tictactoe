@@ -31,7 +31,7 @@ Tout d'abord, l'installation du serveur, déplacez-vous dans le dossier server/ 
 npm install
 ```
 
-Créez une nouvelle base de donnée et importez-y le fichier database.sql qui se trouve dans le dossier server/
+Créez une nouvelle base de donnée et importez-y le fichier database.sql qui se trouve dans à la racine du projet.
 
 Dernière étape, créer votre fichier d'environnement. Copier/coller le fichier .env.exemple et remplacer les placeholders par vos identifiants de connexion.
 
