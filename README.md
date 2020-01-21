@@ -6,7 +6,7 @@ C'est un projet créer pour ma pratique et mon apprentissage.
 
 Ce n'est pas parfait dans la structure et dans le code, mais ça fonctionne !
 
-(C'est mon tout premier projet NodeJS « complet », je suis assez fier de moi, même si ce n'est pas parfait ! :'D' )
+(C'est mon tout premier projet NodeJS « complet », je suis assez fier de moi ! :D )
 
 Si vous avez des commentaires ou des conseils, n'hésitez pas à en discuter dans les Tickets.
 
