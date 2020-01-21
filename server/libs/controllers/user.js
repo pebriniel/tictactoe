@@ -74,6 +74,8 @@ class UserController extends Controller{
 
         this.view.errors = this.getReq().session.errors;
 
+        this.getReq().session.errors = '';
+
         try{
 
             this.view.user = await this.getUser();
@@ -90,7 +92,6 @@ class UserController extends Controller{
 
                     let data = await this.user.checkLogin(login, password);
 
-                    console.log(data);
 
                     if(data > 0){
 
