@@ -16,7 +16,6 @@ Read this in other languages : [Français](README.md), [English](README.en.md)
 
 Le jeu est jouable en local dans les modes de jeu suivant : 3x3, 5x5, 7x7
 
-Playable online, with a game history and a mode replay for being better at the next game.
 Il est aussi jouable en multijoueur avec un historique de vos parties et un mode replay qui vous permettra de revoir vos actions et de devenir meilleurs pour vos prochaines parties !
 
 Le mode multijoueur est réservé aux membres inscrits !
@@ -35,7 +34,7 @@ Créez une nouvelle base de donnée et importez-y le fichier database.sql qui se
 
 Dernière étape, créer votre fichier d'environnement. Copier/coller le fichier .env.exemple et remplacer les placeholders par vos identifiants de connexion.
 
-Maintenant, vous pouvez démarrer le serveur et vous entrainez ! 
+Maintenant, vous pouvez démarrer le serveur et vous entrainez !
 
 Il n'est pas nécessaire de compiler le front/ pour faire fonctionner le project, sauf si vous voulez y modifier le scss/js présent.
 
