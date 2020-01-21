@@ -10,7 +10,7 @@ Ce n'est pas parfait dans la structure et dans le code, mais ça fonctionne !
 
 Si vous avez des commentaires ou des conseils, n'hésitez pas à en discuter dans les Tickets.
 
-Read this in other languages :
+Read this in other languages : [Français](README.md), [English](README.en.md)
 
 ### Features
 
@@ -48,6 +48,6 @@ npm run gulp
 
 ## Upgrades
 
-it lacks options, like the possibility of playing with 5x5 and 7x7 modes in multiplayer. The server already manages these game modes, but it is on the game search that the details are missing.
+Il manque des options, comme la possibilité de jouer avec les modes 5x5 et 7x7 en Multjoueur. La serveur gère déjà ces modes de jeu, mais c'est sur la recherche de partie qu'il manque des détails.
 
-What it also misses, it is in the reading of the replay, to be able to read action by action rather than to see all being displayed in a blow as currently.
+Ce qu'il manque aussi, c'est dans la lecture du replay, de pouvoir lire action par action plutôt que de tout voir s'afficher en un coup comme actuellement.
