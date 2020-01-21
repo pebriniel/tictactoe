@@ -34,6 +34,8 @@ const Board = class {
         let column, returnPlayer;
         let maxSize = this._board.length;
 
+        console.log(maxSize);
+
         for(let c = 0; c < 2 * (maxSize - 1) ; c ++){
 
             for(let line = (maxSize - 1); line >= 0; line --){
@@ -46,7 +48,7 @@ const Board = class {
 
                 returnPlayer = this._board[line][column];
 
-                if(returnPlayer != currentPlayer){
+                if(returnPlayer != currentPlayer || returnPlayer == null || returnPlayer == undefined){
                     victoire = 1;
                     currentPlayer = returnPlayer;
                 }
@@ -59,6 +61,9 @@ const Board = class {
                     return returnPlayer;
                 }
             }
+
+            victoire = 1;
+            
         }
     }
 

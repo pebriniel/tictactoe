@@ -67,13 +67,16 @@ const Board = class {
                 }
                 else if(column >= 0 && column < Game.getFormat(Game.getLevel())){
                     victoire ++;
+                    console.log('c '+column+' l : '+line);
                 }
 
                 if(victoire == Game._max){
+                    console.log('c '+column+' l : '+line);
                     return returnPlayer;
                 }
             }
 
+            victoire = 1;
         }
     }
 
