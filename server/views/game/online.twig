@@ -111,7 +111,15 @@
     chat('game');
 
     window.addEventListener('beforeunload', Interactive.beforeleavePage);
-    window.addEventListener('unload', Interactive.leavePage);
+    window.addEventListener('unload', () => {
+        if(Online.online){
+            Interactive.leavePage();
+            Online.online = false;
+        }
+        else{
+            Interactive.searchGameLeave();
+        }
+    });
 
 </script>
 {% endblock %}
