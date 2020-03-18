@@ -75,7 +75,7 @@ app.get('/game/select', function(req, res){
     new gameRoute(req, res).select();
 });
 
-app.get('/game/online', function(req, res){
+app.get('/game/online/:mode', function(req, res){
     new gameRoute(req, res).execOnline();
 });
 
@@ -94,20 +94,24 @@ var games = [];
 
 io.use(socketCookies);
 
-function searchVersus()
+function searchVersus(playersConnected)
 {
 
-    // console.log(searchPlayers);
+    // console.log(playersConnected);
 
-    if(searchPlayers.length == 2){
-        let joueur1 = searchPlayers.shift();
-        let joueur2 = searchPlayers.shift();
+    if(playersConnected.length == 2){
+        let joueur1 = playersConnected.shift();
+        let joueur2 = playersConnected.shift();
 
         let _uniqid = uniqid();
 
         games[_uniqid] = new Game();
         games[_uniqid].addPlayer(joueur1.user);
         games[_uniqid].addPlayer(joueur2.user);
+        games[_uniqid].setLevel(joueur1.socket.mode);
+
+        console.log(joueur1.socket.mode);
+
         games[_uniqid].init();
 
         let namespace = null;
@@ -202,6 +206,10 @@ io.on('connection', function(socket){
         // Nous vérifions que l'utilisateur est bien connecté...
         try{
 
+            if(action < 0 || action > 2){
+                action = 0;
+            }
+
             let utilisateur = await controller.user.isConnected(socket.request.cookies['userSession']);
 
             // S'il est bien connecté, on lance la recherche de partie
@@ -211,12 +219,18 @@ io.on('connection', function(socket){
                     socket.user = utilisateur;
                 }
 
-                searchPlayers.push({
+                socket.mode = action;
+
+                if(searchPlayers[action] == undefined){
+                    searchPlayers[action] = [];
+                }
+
+                searchPlayers[action].push({
                     socket: socket,
                     user: utilisateur
                 });
 
-                searchVersus();
+                searchVersus(searchPlayers[action]);
 
             }
 
@@ -226,7 +240,7 @@ io.on('connection', function(socket){
             action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
             socket.emit('game action', JSON.stringify(action));
 
-            searchPlayers = searchPlayers.filter(function (el) {
+            searchPlayers[socket.mode] = searchPlayers[socket.mode].filter(function (el) {
               return el.socket != socket;
             });
         }
@@ -238,7 +252,7 @@ io.on('connection', function(socket){
 
         console.log('game leavesearch');
 
-        searchPlayers = searchPlayers.filter(function (el) {
+        searchPlayers[socket.mode] = searchPlayers[socket.mode].filter(function (el) {
           return el.socket != socket;
         });
 
@@ -257,7 +271,7 @@ io.on('connection', function(socket){
     //On nsupprime le joueur du tableau
     socket.on('disconnect', function() {
 
-      searchPlayers = searchPlayers.filter(function (el) {
+      searchPlayers[socket.mode] = searchPlayers[socket.mode].filter(function (el) {
         return el != socket;
       });
    });
@@ -266,7 +280,9 @@ io.on('connection', function(socket){
        action = getGameAction(action, socket.board, socket.joueur);
 
 
-       let victoire = await games[socket.board].getBoard().checkWin();
+       let _level = games[socket.board].getLevel();
+
+       let victoire = await games[socket.board].getBoard().checkWin(_level);
        sendWinStatus(victoire, socket.board, socket.id);
 
        //Si il y a une erreur, on envoie le message d'erreur au joueur 1

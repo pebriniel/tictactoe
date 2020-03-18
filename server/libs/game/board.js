@@ -63,7 +63,7 @@ const Board = class {
             }
 
             victoire = 1;
-            
+
         }
     }
 
@@ -88,7 +88,7 @@ const Board = class {
         }
     }
 
-    async checkWinElement(){
+    async checkWinElement(_level){
         let lastPlayer = null, playerwin = null, score = 0;
 
         for(let i = 0; i < this._board.length; i ++){
@@ -119,13 +119,13 @@ const Board = class {
         return null;
     }
 
-    async checkWin() {
+    async checkWin(_level) {
         let victoire = null;
 
         victoire = await this.checkWinHorizontal();
 
         if(victoire == null){
-            victoire = await this.checkWinElement();
+            victoire = await this.checkWinElement(_level);
         }
 
         if(victoire == null){

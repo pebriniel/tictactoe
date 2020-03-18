@@ -296,8 +296,9 @@ var Interactive = {
     playable: true,
 
     //Si le joueur recherche une partie
-    searchGame: function(e){
-        Online.sendActionSpecific('game search', true);
+    searchGame: function(mode){
+
+        Online.sendActionSpecific('game search', mode);
 
         searchgameleaveBlock.classList.remove('hidden');
         searchgameBlock.classList.add('hidden');
@@ -502,7 +503,7 @@ var Online = {
     },
 
     sendActionSpecific: function(action, value){
-        socket.emit(action, action);
+        socket.emit(action, value);
     }
 }
 

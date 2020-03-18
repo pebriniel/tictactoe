@@ -15,10 +15,12 @@
                 <a href="/game/2">Partie en 7x7</a>
             </p>
         </div>
-        <div class="medium-6 columns callout multiplayer">
+        <div class="small-12 medium-6 columns callout multiplayer">
             <p class="launch">
                 {% if user is defined and user %}
-                    <a href="/game/online">Jouer en multijoueur</a>
+                    <a href="/game/online/0">Jouer en multijoueur 3x3</a><br/>
+                    <a href="/game/online/1">Jouer en multijoueur 5x5</a><br/>
+                    <a href="/game/online/2">Jouer en multijoueur 7x7</a>
                 {% else %}
                     <a>Vous devez être connecté.</a>
                 {% endif %}

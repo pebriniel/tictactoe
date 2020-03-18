@@ -8,6 +8,6 @@ var Online = {
     },
 
     sendActionSpecific: function(action, value){
-        socket.emit(action, action);
+        socket.emit(action, value);
     }
 }

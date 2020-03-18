@@ -1,7 +1,7 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<section id="searchBlock">
+<section id="searchBlock" data-mode="{{ mode }}">
     <header class="row">
         <div class="medium-12 columns">
             <h2 class="text-center ">Recherche d'une partie</h2>
@@ -48,11 +48,14 @@
 <script>
     var socket = io();
 
-    Interactive.searchGame();
+    let mode = searchBlock.dataset.mode;
+
+    Interactive.searchGame(mode);
 
     searchgame.addEventListener('click', function(e){
 
-        Interactive.searchGame(e);
+
+        Interactive.searchGame(mode);
 
         window.addEventListener('beforeunload', Interactive.beforeleavePage);
         window.addEventListener('unload', Interactive.leavePage);
@@ -71,7 +74,7 @@
         searchBlock.classList.add('hidden');
         boardBlock.classList.remove('hidden');
 
-        Game.init();
+        Game.init({{ mode }});
 
         Online.online = true;
 

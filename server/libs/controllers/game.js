@@ -40,6 +40,10 @@ class gameController extends Controller{
         try{
             this.view.user = await this.getUser();
 
+            if(this.getReq().params.mode <= 2){
+                this.view.mode = this.getReq().params.mode;
+            }
+
             if(!this.view.user){
                 console.log('disconnect');
                 return this.redirectTo('/');

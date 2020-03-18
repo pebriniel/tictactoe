@@ -14,7 +14,8 @@ const Game = class {
 
         this._format = {
             0: 3, // 3x3
-            1: 5 // 5x5
+            1: 5, // 5x5
+            2: 7 // 5x5
         };
     }
 
@@ -53,6 +54,11 @@ const Game = class {
     alternatePlayer()
     {
         this._currentPlayer = (this._currentPlayer) ? 0 : 1;
+    }
+
+    setLevel(level)
+    {
+        this._level = level;
     }
 
     getLevel()
