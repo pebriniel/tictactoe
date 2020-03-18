@@ -88,89 +88,16 @@ app.get('/options', function(req, res){
 });
 
 
-
 // Socket.io
-var allPlayers = [];
 var searchPlayers = [];
 var games = [];
 
 io.use(socketCookies);
 
-io.on('connection', function(socket){
-    //On ajoute et initie le joueur
-    allPlayers[socket.id];
+function searchVersus()
+{
 
-    allPlayers[socket.id] = {};
-    allPlayers[socket.id].username = 'boussad';
-    allPlayers[socket.id].cookie = socket.request.cookies['userSession'];
-
-    socket.on('game search', async function(action){
-        // Nous vérifions que l'utilisateur est bien connecté...
-        try{
-
-            let utilisateur = await controller.user.isConnected(allPlayers[socket.id].cookie);
-
-            // S'il est bien connecté, on lance la recherche de partie
-            if(utilisateur){
-
-                searchPlayers.push({
-                    socket: socket.id,
-                    user: utilisateur
-                });
-                console.log('Recherche de partie');
-
-            }
-
-        }
-        catch{
-
-            console.log('stop try ');
-
-            delete allPlayers[socket.id];
-
-            action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
-            socket.emit('game action', JSON.stringify(action));
-
-            searchPlayers = searchPlayers.filter(function (el) {
-              return el.socket != socket.id;
-            });
-        }
-
-    });
-
-    socket.on('game leavesearch', function(action){
-        // delete allPlayers[socket.id];
-
-        searchPlayers = searchPlayers.filter(function (el) {
-          return el.socket != socket.id;
-        });
-
-        console.log('Recherche de partie quitter');
-        console.log(allPlayers);
-        console.log(searchPlayers);
-    });
-
-    socket.on('chat message', function(msg){
-        io.emit('chat message', allPlayers[socket.id].username+ ' '+msg);
-        // io.sockets.socket(socketId).emit(msg);
-    });
-
-    socket.on('chat username', function(msg){
-        allPlayers[socket.id].username = msg;
-    });
-
-    //On nsupprime le joueur du tableau
-    socket.on('disconnect', function() {
-      delete allPlayers[socket.id];
-
-      searchPlayers = searchPlayers.filter(function (el) {
-        return el != socket.id;
-      });
-
-   });
-});
-
-setInterval( function() {
+    // console.log(searchPlayers);
 
     if(searchPlayers.length == 2){
         let joueur1 = searchPlayers.shift();
@@ -186,192 +113,201 @@ setInterval( function() {
         let namespace = null;
         let ns = io.of(namespace || "/");
 
-        let socketPlayer1 = ns.connected[joueur1.socket];
-        let socketPlayer2 = ns.connected[joueur2.socket];
+        if (joueur1.socket && joueur2.socket) {
 
-        if (socketPlayer1 && socketPlayer2) {
-            socketPlayer1.emit("game find", 1);
-            socketPlayer2.emit("game find", 1);
+            joueur1.socket.board = _uniqid;
+            joueur2.socket.board = _uniqid;
 
-            //Message d'accueil
-            games[_uniqid].getInteractive().setActionMessage('valide', `Vous commencez !`);
-            socketPlayer1.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
+            joueur1.socket.joueur = 0;
+            joueur2.socket.joueur = 1;
 
-            games[_uniqid].getInteractive().setActionMessage('valide', `Votre adversaire commence ! `);
-            socketPlayer2.emit('game action', JSON.stringify(games[_uniqid].getInteractive().getAction()));
+            joueur1.socket.join(_uniqid);
+            joueur2.socket.join(_uniqid);
 
-            //On attends les messages du joueur 1
-            socketPlayer1.on('game message', function(msg){
-                games[_uniqid].setReplayValue(msg);
-
-                socketPlayer2.emit('game message', msg);
-                socketPlayer1.emit('game message', msg);
-            });
-
-            //On attends les messages du joueur 2
-            socketPlayer2.on('game message', function(msg){
-                games[_uniqid].setReplayValue(msg);
-
-                socketPlayer1.emit('game message', msg);
-                socketPlayer2.emit('game message', msg);
-            });
-
-            function getGameAction(action, player){
-
-                action = JSON.parse(action);
-                games[_uniqid].getInteractive().ClickOnCase(action, player);
-
-                action = games[_uniqid].getInteractive().getAction();
-
-                // S'il n'y a pas d'erreur on envoie les informations aux joueurs
-                if(action.type != 'erreur'){
-                    games[_uniqid].setReplayValue(action);
-                    games[_uniqid].getBoard().addAction();
-
-                    socketPlayer1.emit('game action', JSON.stringify(action));
-                    socketPlayer2.emit('game action', JSON.stringify(action));
-                }
-
-                return action;
-            }
-
-            function sendWinStatus(victoire){
-
-                let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
-                let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
-                let actionDraw = {action: 'leaveGame', draw: true, type: 'valide', message: `Il n'y a plus d'action possible, vous êtes à égalité ! Rententez votre chance !`};
-
-                if(victoire == 0) {
-
-                    games[_uniqid].getReplayModel().setWinA(true);
-
-                    games[_uniqid].setReplayValue(actionWin);
-                    socketPlayer1.emit('game action', JSON.stringify(actionWin));
-
-                    games[_uniqid].setReplayValue(actionLoose);
-                    socketPlayer2.emit('game action', JSON.stringify(actionLoose));
-
-                }
-                else if(victoire == 1) {
-
-                    games[_uniqid].getReplayModel().setWinB(true);
-
-                    games[_uniqid].setReplayValue(actionLoose);
-                    socketPlayer1.emit('game action', JSON.stringify(actionLoose));
-
-                    games[_uniqid].setReplayValue(actionWin);
-                    socketPlayer2.emit('game action', JSON.stringify(actionWin));
-
-                }
-                // il y a une égalité !
-                else if(victoire == 2) {
-
-                    games[_uniqid].setReplayValue(actionDraw);
-
-                    socketPlayer1.emit('game action', JSON.stringify(actionDraw));
-                    socketPlayer2.emit('game action', JSON.stringify(actionDraw));
-
-                }
-
-                //On supprime le Board
-                if(victoire != undefined || victoire != null){
-
-                    games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
-
-                    delete games[_uniqid];
-                    delete socketPlayer1;
-                    delete socketPlayer2;
-                }
-            }
-
-            //On attends les actions du joueur 1
-            socketPlayer1.on('game action', async function(action){
-                action = getGameAction(action, 0);
-
-
-                let victoire = await games[_uniqid].getBoard().checkWin();
-                sendWinStatus(victoire);
-
-                console.log(action);
-                //Si il y a une erreur, on envoie le message d'erreur au joueur 1
-                if(action.type == 'erreur'){
-                    games[_uniqid].setReplayValue(action);
-                    socketPlayer1.emit('game action', JSON.stringify(action));
-                }
-
-            });
-
-            //On attends les actions du joueur 2
-            socketPlayer2.on('game action', async function(action){
-                action = getGameAction(action, 1);
-
-                let victoire = await  games[_uniqid].getBoard().checkWin();
-                sendWinStatus(victoire);
-
-                console.log(action);
-                //Si il y a une erreur, on envoie le message d'erreur au joueur 2
-                if(action.type == 'erreur'){
-                    games[_uniqid].setReplayValue(action);
-                    socketPlayer2.emit('game action', JSON.stringify(action));
-                }
-
-                // sendWinStatus(victoire);
-            });
-
-            //Si joueur 1 quitte le jeu
-            socketPlayer1.on('game leave', function(action){
-
-                action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
-
-                if(games[_uniqid] != undefined){
-                    games[_uniqid].setReplayValue(action);
-                }
-
-                socketPlayer2.emit('game action', JSON.stringify(action));
-
-                if(games[_uniqid] != undefined){
-                    games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
-                }
-
-                delete games[_uniqid];
-                delete socketPlayer1;
-                delete socketPlayer2;
-
-            });
-
-            //Si joueur 2 quitte le jeu
-            socketPlayer2.on('game leave', function(action){
-
-                action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 2 à quitter la partie.`};
-                if(games[_uniqid] != undefined){
-                    games[_uniqid].setReplayValue(action);
-                }
-
-
-                socketPlayer1.emit('game action', JSON.stringify(action));
-
-                if(games[_uniqid] != undefined){
-                    games[_uniqid].getReplayModel().save(games[_uniqid].getReplayValue());
-                }
-
-                delete games[_uniqid];
-                delete socketPlayer1;
-                delete socketPlayer2;
-
-            });
-        } else {
-            if(socketPlayer1) {
-                socketPlayer1.emit("game clear", 1);
-                socketPlayer1.emit("game search", 1);
-            }
-            if(socketPlayer2) {
-                socketPlayer2.emit("game clear", 1);
-                socketPlayer2.emit("game search", 1);
-            }
+            joueur1.socket.emit("game find", 1);
+            joueur2.socket.emit("game find", 1);
         }
+    }
+}
+
+function getGameAction(action, board, player){
+
+    action = JSON.parse(action);
+
+    games[board].getInteractive().ClickOnCase(action, player);
+
+    action = games[board].getInteractive().getAction();
+
+    // S'il n'y a pas d'erreur on envoie les informations aux joueurs
+    if(action.type != 'erreur'){
+        games[board].setReplayValue(action);
+        games[board].getBoard().addAction();
+
+        io.sockets.in(board).emit('game action', JSON.stringify(action));
+    }
+
+    return action;
+}
+
+function sendWinStatus(victoire, board, socketId){
+
+    let actionWin = {action: 'leaveGame', win: true, type: 'valide', message: `Victoire !`};
+    let actionLoose = {action: 'leaveGame', loose: true, type: 'erreur', message: `Vous avez perdu ! Rententez votre chance !`};
+    let actionDraw = {action: 'leaveGame', draw: true, type: 'valide', message: `Il n'y a plus d'action possible, vous êtes à égalité ! Rententez votre chance !`};
+
+    if(victoire == 0) {
+
+        games[board].getReplayModel().setWinA(true);
+
+        games[board].setReplayValue(actionLoose);
+        io.sockets.to(board).emit('game action', JSON.stringify(actionLoose));
+
+        games[board].setReplayValue(actionWin);
+        io.sockets.to(`${socketId}`).emit('game action', JSON.stringify(actionWin));
+
 
     }
-}, 4000);
+    else if(victoire == 1) {
+
+        games[board].getReplayModel().setWinB(true);
+
+        games[board].setReplayValue(actionLoose);
+        io.sockets.to(board).emit('game action', JSON.stringify(actionLoose));
+
+        games[board].setReplayValue(actionWin);
+        io.sockets.to(`${socketId}`).emit('game action', JSON.stringify(actionWin));
+
+    }
+    // il y a une égalité !
+    else if(victoire == 2) {
+
+        games[board].setReplayValue(actionDraw);
+
+        io.sockets.in(board).emit('game action', JSON.stringify(actionDraw));
+
+    }
+
+    //On supprime le Board
+    if(victoire != undefined || victoire != null){
+
+        games[board].getReplayModel().save(games[board].getReplayValue());
+
+        delete games[board];
+    }
+}
+
+io.on('connection', function(socket){
+
+    socket.on('game search', async function(action){
+        // Nous vérifions que l'utilisateur est bien connecté...
+        try{
+
+            let utilisateur = await controller.user.isConnected(socket.request.cookies['userSession']);
+
+            // S'il est bien connecté, on lance la recherche de partie
+            if(utilisateur){
+
+                if(socket.user == undefined){
+                    socket.user = utilisateur;
+                }
+
+                searchPlayers.push({
+                    socket: socket,
+                    user: utilisateur
+                });
+
+                searchVersus();
+
+            }
+
+        }
+        catch{
+
+            action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur 1 à quitter la partie.`};
+            socket.emit('game action', JSON.stringify(action));
+
+            searchPlayers = searchPlayers.filter(function (el) {
+              return el.socket != socket;
+            });
+        }
+
+    });
+
+    socket.on('game leavesearch', function(action){
+        // delete allPlayers[socket];
+
+        console.log('game leavesearch');
+
+        searchPlayers = searchPlayers.filter(function (el) {
+          return el.socket != socket;
+        });
+
+    });
+
+    socket.on('chat message', function(msg){
+
+        io.emit('chat message', socket.username+ ' '+msg);
+
+    });
+
+    socket.on('chat username', function(msg){
+        socket.username = msg;
+    });
+
+    //On nsupprime le joueur du tableau
+    socket.on('disconnect', function() {
+
+      searchPlayers = searchPlayers.filter(function (el) {
+        return el != socket;
+      });
+   });
+
+   socket.on('game action', async function(action){
+       action = getGameAction(action, socket.board, socket.joueur);
+
+
+       let victoire = await games[socket.board].getBoard().checkWin();
+       sendWinStatus(victoire, socket.board, socket.id);
+
+       //Si il y a une erreur, on envoie le message d'erreur au joueur 1
+       if(action.type == 'erreur'){
+           games[socket.board].setReplayValue(action);
+           io.sockets.in(socket.board).emit('game action', JSON.stringify(action));
+       }
+   });
+
+   //On attends les messages du joueur 1
+   socket.on('game message', function(msg){
+       games[socket.board].setReplayValue({joueur: socket.joueur, message: msg});
+
+       io.sockets.in(socket.board).emit('game message', msg);
+
+   });
+
+   //Si joueur 1 quitte le jeu
+   socket.on('game leave', function(action){
+
+       let joueur = socket.joueur ++;
+
+       action = {action: 'leaveGame', win: 1, type: 'erreur', message: `Le joueur ${joueur} à quitter la partie.`};
+
+       if(games[socket.board] != undefined){
+           games[socket.board].setReplayValue(action);
+       }
+
+       io.sockets.to(socket.board).emit('game action', JSON.stringify(action));
+
+       if(games[socket.board] != undefined){
+           games[socket.board].getReplayModel().save(games[socket.board].getReplayValue());
+       }
+
+       delete games[socket.board];
+
+   });
+
+});
+
+
 
 http.listen(port, function(){
   console.log('listening on *:' + port);
